@@ -1,6 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -37,9 +37,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <body className={inter.className}>
+        <GoogleTagManager gtmId="GTM-T3RQ6HCR" />
         {children}
       </body>
-      <GoogleAnalytics gaId="G-ZKBCF9YN4X" />
     </html>
   );
 }
