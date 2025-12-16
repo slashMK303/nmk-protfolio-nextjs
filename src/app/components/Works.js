@@ -155,18 +155,8 @@ export default function Works() {
             card.addEventListener('mouseleave', handleMouseLeave);
         });
 
-        // Center content fade-in animation
-        gsap.from('.center-content > *', {
-            opacity: 0,
-            y: 50,
-            stagger: 0.15,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: sectionRef.current,
-                start: 'top 70%',
-            },
-        });
+        // Note: Avoid animating center-content with both Framer Motion and GSAP simultaneously
+        // to prevent conflicting opacity transforms that can cause flicker.
 
         return () => {
             window.removeEventListener('resize', checkMobile);

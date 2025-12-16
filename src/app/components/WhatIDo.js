@@ -50,6 +50,7 @@ export default function WhatIDo() {
     useEffect(() => {
         if (activeIndex === prevIndex) return;
 
+
         // Exit animation for previous content (if exists)
         if (prevIndex !== null && prevContentRef.current) {
             const prevNumber = prevContentRef.current.querySelector('.skill-number');
@@ -357,7 +358,6 @@ export default function WhatIDo() {
                                     className="absolute inset-0 w-full"
                                     style={{
                                         zIndex: idx === prevIndex ? 20 : idx === activeIndex ? 10 : 0,
-                                        pointerEvents: idx === activeIndex || idx === prevIndex ? 'auto' : 'none',
                                     }}
                                 >
                                     <div className="flex flex-col md:flex-row md:items-baseline gap-4 md:gap-8">
