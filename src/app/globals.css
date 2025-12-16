@@ -1,12 +1,23 @@
 @import "tailwindcss";
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto; /* Let Lenis handle smooth scrolling */
 }
 
 body {
     font-family: "Inter", sans-serif;
     background-color: #121212;
     overflow-x: hidden;
-    scroll-behavior: smooth;
+    scroll-behavior: auto; /* Let Lenis handle smooth scrolling */
+}
+
+/* Optimize for Lenis smooth scroll */
+* {
+    scroll-behavior: auto;
+}
+
+/* Prevent layout shift during scroll */
+html,
+body {
+    overscroll-behavior: none;
 }

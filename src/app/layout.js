@@ -1,6 +1,7 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { GoogleTagManager } from '@next/third-parties/google'
+import LenisProvider from './providers/LenisProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -35,10 +36,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <body className={inter.className}>
-        <GoogleTagManager gtmId="GTM-T3RQ6HCR" />
-        {children}
+        <LenisProvider>
+          <GoogleTagManager gtmId="GTM-T3RQ6HCR" />
+          {children}
+        </LenisProvider>
       </body>
     </html>
   );
