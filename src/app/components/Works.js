@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Image from 'next/image';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,44 +22,44 @@ export default function Works() {
 
     const projects = [
         {
-            id: 'proj-01',
-            number: '01',
-            title: 'Indo Dragonica',
-            subtitle: 'Private Server Website',
-            description: 'Indonesian community site for Dragonica Online, offering game guides, videos, and updates.',
-            thumbnail: '/img/project/idgn.png',
-            demoLink: 'https://www.indodragonica.com/',
-            position: { top: '10%', left: '5%', rotate: -8 },
+            id: "proj-01",
+            number: "01",
+            title: "Indo Dragonica",
+            subtitle: "Private Server Website",
+            description: "Indonesian community site for Dragonica Online, offering game guides, videos, and updates.",
+            thumbnail: "/img/project/idgn.png",
+            demoLink: "https://www.indodragonica.com/",
+            position: { top: "10%", left: "5%", rotate: -8 },
         },
         {
-            id: 'proj-02',
-            number: '02',
-            title: 'Portfolio',
-            subtitle: 'Website v1',
-            description: 'Personal portfolio website showcasing skills and projects.',
-            thumbnail: '/img/project/personalweb.jpg',
-            demoLink: 'https://nanangmarvin-8ko8wl5tz-vinnns-projects.vercel.app/',
-            position: { top: '15%', right: '8%', rotate: 12 },
+            id: "proj-02",
+            number: "02",
+            title: "Portfolio",
+            subtitle: "Website v1",
+            description: "Personal portfolio website showcasing skills and projects.",
+            thumbnail: "/img/project/personalweb.jpg",
+            demoLink: "https://nanangmarvin-8ko8wl5tz-vinnns-projects.vercel.app/",
+            position: { top: "15%", right: "8%", rotate: 12 },
         },
         {
-            id: 'proj-03',
-            number: '03',
-            title: 'QR Code',
-            subtitle: 'Generator',
-            description: 'Generate and download QR codes for various purposes.',
-            thumbnail: '/img/project/qrgenerator.jpg',
-            demoLink: 'https://slashmk303.github.io/qr-code-generate-simple/',
-            position: { bottom: '20%', left: '10%', rotate: 6 },
+            id: "proj-03",
+            number: "03",
+            title: "QR Code",
+            subtitle: "Generator",
+            description: "Generate and download QR codes for various purposes.",
+            thumbnail: "/img/project/qrgenerator.jpg",
+            demoLink: "https://slashmk303.github.io/qr-code-generate-simple/",
+            position: { bottom: "20%", left: "10%", rotate: 6 },
         },
         {
-            id: 'proj-04',
-            number: '04',
-            title: 'Genocide Egg',
-            subtitle: 'Game Project',
-            description: 'A game project made during college studies.',
-            thumbnail: '/img/project/genocideegg.png',
-            demoLink: 'https://marvin195.itch.io/genocide-egg',
-            position: { bottom: '15%', right: '5%', rotate: -10 },
+            id: "proj-04",
+            number: "04",
+            title: "Genocide Egg",
+            subtitle: "Game Project",
+            description: "A game project made during college studies.",
+            thumbnail: "/img/project/genocideegg.png",
+            demoLink: "https://marvin195.itch.io/genocide-egg",
+            position: { bottom: "15%", right: "5%", rotate: -10 },
         },
     ];
 
@@ -69,7 +69,7 @@ export default function Works() {
         // Determine if current viewport is mobile (tailwind md breakpoint ~768px)
         const checkMobile = () => setIsMobile(window.innerWidth < 768);
         checkMobile();
-        window.addEventListener('resize', checkMobile);
+        window.addEventListener("resize", checkMobile);
 
         // GSAP ScrollTrigger for smooth parallax on cards
         const cards = gsap.utils.toArray('.floating-card');
@@ -159,7 +159,7 @@ export default function Works() {
         // to prevent conflicting opacity transforms that can cause flicker.
 
         return () => {
-            window.removeEventListener('resize', checkMobile);
+            window.removeEventListener("resize", checkMobile);
             ScrollTrigger.getAll().forEach((t) => t.kill());
         };
     }, []);
@@ -275,7 +275,8 @@ export default function Works() {
                                                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/10 to-transparent rounded-2xl blur-2xl"></div>
                                             </div>
                                         )}
-                                        <div className={`absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 ${hoveredCard === project.id ? 'opacity-100' : 'opacity-0'}`}
+                                        <div
+                                            className={`absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 ${hoveredCard === project.id ? 'opacity-100' : 'opacity-0'}`}
                                             style={{
                                                 background: 'linear-gradient(135deg, rgba(59,130,246,0.3) 0%, transparent 50%)',
                                                 borderRadius: '1rem',
@@ -291,3 +292,4 @@ export default function Works() {
         </section>
     );
 }
+

@@ -19,6 +19,15 @@ export default function WhatIDo() {
     const prevContentRef = useRef(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [prevIndex, setPrevIndex] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Lacak ukuran viewport untuk fallback mobile
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Set initial state for all content on mount
     useEffect(() => {
@@ -155,6 +164,16 @@ export default function WhatIDo() {
     }, [activeIndex]);
 
     useEffect(() => {
+        if (isMobile) {
+            // Matikan trigger desktop saat mobile
+            ScrollTrigger.getById('horizontal-gallery')?.kill();
+            if (typeof window !== 'undefined' && keyHandlerRef.current) {
+                window.removeEventListener('keydown', keyHandlerRef.current);
+                keyHandlerRef.current = null;
+            }
+            return undefined;
+        }
+
         // Initialize Lenis smooth scroll
         let lenis;
         const initLenis = async () => {
@@ -184,7 +203,6 @@ export default function WhatIDo() {
             // Horizontal scrolling gallery: pin section, translate track on scroll
             if (panelsContainerRef.current) {
                 const track = panelsContainerRef.current;
-                const getMaxX = () => -(track.scrollWidth - window.innerWidth);
 
                 gsap.to(track, {
                     ease: "none",
@@ -252,7 +270,7 @@ export default function WhatIDo() {
             }
             lenis?.destroy();
         };
-    }, []);
+    }, [isMobile]);
 
     // Helper function to split description into lines with CSS variable delay
     const createDescriptionLines = (text) => {
@@ -305,18 +323,18 @@ export default function WhatIDo() {
     return (
         <section ref={sectionRef} id="what-i-do" className="relative bg-[#121212] text-neutral-200 overflow-hidden">
             <div className="sticky top-0 z-50 flex flex-col gap-4 bg-gradient-to-b from-[#121212] via-[#121212] to-[#121212]/95 px-6 pb-8 pt-12 md:px-12 lg:px-16">
-                <h2 ref={titleRef} className="text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tight text-white">
+                <h2 ref={titleRef} className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-extrabold tracking-tight text-white">
                     What I Do
                 </h2>
-                <p ref={serviceRef} className="text-neutral-400 text-xl md:text-2xl max-w-4xl leading-relaxed">
+                <p ref={serviceRef} className="text-neutral-400 text-lg sm:text-xl md:text-2xl max-w-4xl leading-relaxed">
                     Scroll horizontally to explore my capabilities. Each section reveals a core skill area.
                 </p>
             </div>
 
-            <div className="relative h-screen">
-                <div className="absolute inset-0 overflow-hidden">
-                    {/* Lateral Pin Indicator */}
-                    <div className="absolute left-0 top-0 h-full px-4 md:px-8 lg:px-10 pointer-events-none flex items-center -mt-20 md:-mt-24">
+            <div className="relative md:h-screen h-auto">
+                <div className="md:absolute md:inset-0 md:overflow-hidden">
+                    {/* Lateral Pin Indicator (desktop only) */}
+                    <div className="hidden md:flex absolute left-0 top-0 h-full px-4 md:px-8 lg:px-10 pointer-events-none items-center -mt-20 md:-mt-24">
                         <div className="w-full">
                             <div className="flex items-center gap-3">
                                 <div className="relative h-[22vh] md:h-[20vh] lg:h-[18vh] w-[2px] bg-white/10 rounded-full overflow-hidden">
@@ -340,7 +358,8 @@ export default function WhatIDo() {
                             </div>
                         </div>
                     </div>
-                    <div ref={panelsContainerRef} className="flex h-full items-center justify-center px-16 md:px-24 lg:px-32 -mt-20 md:-mt-24">
+
+                    <div ref={panelsContainerRef} className="hidden md:flex h-full items-center justify-center px-16 md:px-24 lg:px-32 -mt-20 md:-mt-24">
                         <div className="relative w-full max-w-6xl min-h-[600px]">
                             {/* Render ALL skills with absolute positioning - visibility controlled by z-index and opacity */}
                             {skills.map((skill, idx) => (
@@ -382,6 +401,30 @@ export default function WhatIDo() {
                             ))}
                         </div>
                     </div>
+                </div>
+
+                {/* Mobile fallback: stack vertikal, tanpa pinning */}
+                <div className="md:hidden px-6 pb-12 space-y-10">
+                    {skills.map((skill) => (
+                        <div key={skill.id} className="bg-white/5 rounded-2xl border border-white/10 p-6 space-y-4 shadow-lg">
+                            <div className="flex items-center gap-3">
+                                <span className="text-4xl font-black text-white/90">{skill.id}</span>
+                                <h3 className="text-2xl font-bold text-white leading-tight">{skill.title}</h3>
+                            </div>
+                            <div className="text-neutral-200 text-base leading-relaxed space-y-2">
+                                {skill.descLines.map((line, i) => (
+                                    <p key={i}>{line.text}</p>
+                                ))}
+                            </div>
+                            <div className="flex flex-wrap gap-3 pt-2">
+                                {skill.stack.map((item, i) => (
+                                    <span key={i} className="px-4 py-2 rounded-full bg-white/10 text-white/90 text-sm font-medium border border-white/10">
+                                        {item}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>

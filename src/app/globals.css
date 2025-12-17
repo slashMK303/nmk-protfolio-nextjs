@@ -11,6 +11,11 @@ body {
     scroll-behavior: auto; /* Let Lenis handle smooth scrolling */
 }
 
+.loading-lock {
+    overflow: hidden;
+    height: 100vh;
+}
+
 /* Optimize for Lenis smooth scroll */
 * {
     scroll-behavior: auto;
