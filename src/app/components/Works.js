@@ -27,7 +27,7 @@ export default function Works() {
             title: "Indo Dragonica",
             subtitle: "Private Server Website",
             description: "Indonesian community site for Dragonica Online, offering game guides, videos, and updates.",
-            thumbnail: "/img/project/idgn.png",
+            thumbnail: "/img/project/idgn.webp",
             demoLink: "https://www.indodragonica.com/",
             position: { top: "10%", left: "5%", rotate: -8 },
         },
@@ -37,7 +37,7 @@ export default function Works() {
             title: "Portfolio",
             subtitle: "Website v1",
             description: "Personal portfolio website showcasing skills and projects.",
-            thumbnail: "/img/project/personalweb.jpg",
+            thumbnail: "/img/project/personalweb.webp",
             demoLink: "https://nanangmarvin-8ko8wl5tz-vinnns-projects.vercel.app/",
             position: { top: "15%", right: "8%", rotate: 12 },
         },
@@ -47,7 +47,7 @@ export default function Works() {
             title: "QR Code",
             subtitle: "Generator",
             description: "Generate and download QR codes for various purposes.",
-            thumbnail: "/img/project/qrgenerator.jpg",
+            thumbnail: "/img/project/qrgenerator.webp",
             demoLink: "https://slashmk303.github.io/qr-code-generate-simple/",
             position: { bottom: "20%", left: "10%", rotate: 6 },
         },
@@ -57,7 +57,7 @@ export default function Works() {
             title: "Genocide Egg",
             subtitle: "Game Project",
             description: "A game project made during college studies.",
-            thumbnail: "/img/project/genocideegg.png",
+            thumbnail: "/img/project/genocideegg.webp",
             demoLink: "https://marvin195.itch.io/genocide-egg",
             position: { bottom: "15%", right: "5%", rotate: -10 },
         },
@@ -204,7 +204,7 @@ export default function Works() {
                                         <span className="text-blue-300 font-bold text-xs">{project.number}</span>
                                     </div>
                                     <div className="relative w-full h-40 overflow-hidden bg-gray-900">
-                                        <Image src={project.thumbnail} alt={project.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" priority={index === 0} />
+                                        <Image src={project.thumbnail} alt={project.title} fill sizes="(max-width: 768px) 100vw, 380px" className="object-cover transition-transform duration-700 group-hover:scale-105" priority={index === 0} />
                                         <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent opacity-70"></div>
                                     </div>
                                     <div className="p-4">
@@ -254,7 +254,7 @@ export default function Works() {
                                             <span className="text-blue-300 font-bold text-sm">{project.number}</span>
                                         </div>
                                         <div className="relative w-full h-44 md:h-52 overflow-hidden bg-gray-900 flex-shrink-0">
-                                            <Image src={project.thumbnail} alt={project.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" priority={index === 0} />
+                                            <Image src={project.thumbnail} alt={project.title} fill sizes="(max-width: 768px) 100vw, 380px" className="object-cover transition-transform duration-700 group-hover:scale-110" priority={index === 0} />
                                             <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent opacity-70"></div>
                                         </div>
                                         <div className="p-5 md:p-6 relative z-10 flex-1 flex flex-col justify-between">

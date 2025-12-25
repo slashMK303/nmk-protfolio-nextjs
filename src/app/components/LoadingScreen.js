@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { preloadImage } from "../../lib/preloadImage";
+import { useLoading } from "./LoadingContext";
 
 export default function LoadingScreen() {
     const overlayRef = useRef(null);
     const textRef = useRef(null);
     const [done, setDone] = useState(false);
     const [percent, setPercent] = useState(0);
+    const { setDone: setGlobalDone } = useLoading();
 
     useEffect(() => {
         const overlay = overlayRef.current;
@@ -40,21 +42,15 @@ export default function LoadingScreen() {
                         onComplete: () => {
                             document.body.classList.remove("loading-lock");
                             setDone(true);
+                            setGlobalDone(true);
                         },
                     },
                     "<"
                 );
         };
 
-        // Preload aset penting agar overlay baru hilang setelah konten siap
-        const assets = [
-            "/img/hero.jpg",
-            "/img/project/idgn.png",
-            "/img/project/personalweb.jpg",
-            "/img/project/qrgenerator.jpg",
-            "/img/project/genocideegg.png",
-        ];
-
+        // Preload hanya gambar hero agar loading lebih cepat
+        const assets = ["/img/hero.webp"];
         let loadedCount = 0;
         const total = assets.length;
 
@@ -71,12 +67,12 @@ export default function LoadingScreen() {
         // Start with small percent to show progress
         setPercent(5);
 
+        let safetyTimer;
         Promise.all(
             assets.map((url) =>
                 preloadImage(url).then(() => {
                     loadedCount += 1;
                     const p = Math.round((loadedCount / total) * 100);
-                    // animate number smoothly
                     gsap.to({}, { duration: 0.25, onUpdate: () => setPercent(p) });
                 })
             )
@@ -99,9 +95,15 @@ export default function LoadingScreen() {
                 });
             });
         });
+        // Fallback timeout agar tidak stuck
+        safetyTimer = setTimeout(() => {
+            if (!finish.called) {
+                finish();
+            }
+        }, 9000);
 
         return () => {
-            // tidak perlu cleanup listener karena memakai once dan sudah resolve
+            clearTimeout(safetyTimer);
         };
     }, []);
 

@@ -327,7 +327,11 @@ export default function WhatIDo() {
                     What I Do
                 </h2>
                 <p ref={serviceRef} className="text-neutral-400 text-lg sm:text-xl md:text-2xl max-w-4xl leading-relaxed">
-                    Scroll horizontally to explore my capabilities. Each section reveals a core skill area.
+                    I specialize in building full-stack web applications
+                    that are fast, reliable, and user-friendly. With a
+                    solid foundation in both frontend and backend
+                    technologies, I help bring ideas to life whether
+                    it's for a business, a startup, or a product team.
                 </p>
             </div>
 
