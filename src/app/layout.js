@@ -41,10 +41,28 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Nanang Marvin Kurniawan',
+    url: 'https://nanangmarvin.my.id',
+    image: 'https://nanangmarvin.my.id/img/hero.webp',
+    jobTitle: 'Web Developer',
+    description: 'Web Developer focused on building innovative digital products using React, Next.js, and modern web technologies.',
+    sameAs: [
+      'https://github.com/slashMK303',
+    ],
+    knowsAbout: ['Web Development', 'React', 'Next.js', 'JavaScript', 'TypeScript', 'Node.js', 'UI/UX Design'],
+  };
+
   return (
     <html lang="en">
       <head>
         <link rel="preload" as="image" href="/img/hero.webp" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body className={inter.className}>
         <LoadingProvider>

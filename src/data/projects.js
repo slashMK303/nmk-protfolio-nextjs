@@ -1,0 +1,130 @@
+// Centralized project data - single source of truth
+// Import this in both Works.js and /works/page.js
+
+export const allProjects = [
+    {
+        id: "proj-01",
+        number: "01",
+        title: "Indo Dragonica",
+        subtitle: "Private Server Website",
+        category: "web",
+        featured: true,
+        description: "Indonesian community site for Dragonica Online, offering game guides, videos, and updates.",
+        thumbnail: "/img/project/idgn.webp",
+        demoLink: "https://www.indodragonica.com/",
+        techStack: ["nextjs", "tailwind", "gsap"],
+        // Position for floating cards in homepage Works section
+        position: { top: "10%", left: "5%", rotate: -8 },
+    },
+    {
+        id: "proj-02",
+        number: "02",
+        title: "Portfolio",
+        subtitle: "Website v1",
+        category: "web",
+        featured: true,
+        description: "Personal portfolio website showcasing skills and projects.",
+        thumbnail: "/img/project/personalweb.webp",
+        demoLink: "https://nanangmarvin-8ko8wl5tz-vinnns-projects.vercel.app/",
+        techStack: ["react", "tailwind", "javascript"],
+        position: { top: "15%", right: "8%", rotate: 12 },
+    },
+    {
+        id: "proj-03",
+        number: "03",
+        title: "QR Code",
+        subtitle: "Generator",
+        category: "generator",
+        featured: true,
+        description: "Generate and download QR codes for various purposes.",
+        thumbnail: "/img/project/qrgenerator.webp",
+        demoLink: "https://slashmk303.github.io/qr-code-generate-simple/",
+        techStack: ["html", "css", "javascript"],
+        position: { bottom: "20%", left: "10%", rotate: 6 },
+    },
+    {
+        id: "proj-04",
+        number: "04",
+        title: "Genocide Egg",
+        subtitle: "Game Project",
+        category: "game",
+        featured: true,
+        description: "A game project made during college studies.",
+        thumbnail: "/img/project/genocideegg.webp",
+        demoLink: "https://marvin195.itch.io/genocide-egg",
+        techStack: ["unity", "csharp"],
+        position: { bottom: "15%", right: "5%", rotate: -10 },
+    },
+    {
+        id: "proj-05",
+        number: "05",
+        title: "Demo App A",
+        subtitle: "Dummy Project",
+        category: "web",
+        featured: false,
+        description: "Prototype demo app for layout testing and visual polish.",
+        thumbnail: "/img/project/personalweb.webp",
+        demoLink: "https://example.com/demo-a",
+        techStack: ["react", "tailwind"],
+    },
+    {
+        id: "proj-06",
+        number: "06",
+        title: "Demo App B",
+        subtitle: "Dummy Project",
+        category: "web",
+        featured: false,
+        description: "UI/UX experiment used as a placeholder project.",
+        thumbnail: "/img/project/idgn.webp",
+        demoLink: "https://example.com/demo-b",
+        techStack: ["nextjs", "gsap"],
+    },
+    {
+        id: "proj-07",
+        number: "07",
+        title: "Demo App C",
+        subtitle: "Dummy Project",
+        category: "generator",
+        featured: false,
+        description: "Small interactive prototype for gallery testing.",
+        thumbnail: "/img/project/qrgenerator.webp",
+        demoLink: "https://example.com/demo-c",
+        techStack: ["javascript", "html"],
+    },
+    {
+        id: "proj-08",
+        number: "08",
+        title: "Demo App D",
+        subtitle: "Dummy Project",
+        category: "game",
+        featured: false,
+        description: "Placeholder project to simulate larger portfolios.",
+        thumbnail: "/img/project/genocideegg.webp",
+        demoLink: "https://example.com/demo-d",
+        techStack: ["unity", "csharp"],
+    },
+];
+
+// Featured projects for homepage Works section (with floating card positions)
+export const featuredProjects = allProjects.filter(p => p.featured);
+
+// Categories for filter
+export const categories = [
+    { id: "all", label: "All" },
+    { id: "web", label: "Web" },
+    { id: "game", label: "Game" },
+    { id: "generator", label: "Generator" },
+];
+
+// Tech stack icon mapping (used in both components)
+export const techIcons = {
+    react: { name: "React", color: "#61DAFB" },
+    nextjs: { name: "Next.js", color: "#ffffff" },
+    tailwind: { name: "Tailwind CSS", color: "#06B6D4" },
+    gsap: { name: "GSAP", color: "#88CE02" },
+    html: { name: "HTML5", color: "#E34F26" },
+    css: { name: "CSS3", color: "#1572B6" },
+    javascript: { name: "JavaScript", color: "#F7DF1E" },
+    unity: { name: "Unity", color: "#ffffff" },
+    csharp: { name: "C# / .NET", color: "#512BD4" },
+};

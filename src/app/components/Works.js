@@ -6,74 +6,36 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { SiReact, SiNextdotjs, SiTailwindcss, SiGreensock, SiHtml5, SiCss3, SiJavascript, SiUnity } from "react-icons/si";
+import { SiReact, SiNextdotjs, SiTailwindcss, SiGreensock, SiHtml5, SiCss3, SiJavascript, SiUnity, SiDotnet } from "react-icons/si";
+import { featuredProjects, techIcons as techIconsData } from "@/data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Tech stack icon mapping
-const techIcons = {
-    react: { icon: SiReact, name: "React", color: "#61DAFB" },
-    nextjs: { icon: SiNextdotjs, name: "Next.js", color: "#ffffff" },
-    tailwind: { icon: SiTailwindcss, name: "Tailwind CSS", color: "#06B6D4" },
-    gsap: { icon: SiGreensock, name: "GSAP", color: "#88CE02" },
-    html: { icon: SiHtml5, name: "HTML5", color: "#E34F26" },
-    css: { icon: SiCss3, name: "CSS3", color: "#1572B6" },
-    javascript: { icon: SiJavascript, name: "JavaScript", color: "#F7DF1E" },
-    unity: { icon: SiUnity, name: "Unity", color: "#ffffff" },
+// Map icon components to tech data
+const iconComponents = {
+    react: SiReact,
+    nextjs: SiNextdotjs,
+    tailwind: SiTailwindcss,
+    gsap: SiGreensock,
+    html: SiHtml5,
+    css: SiCss3,
+    javascript: SiJavascript,
+    unity: SiUnity,
+    csharp: SiDotnet,
 };
+
+// Combine icon components with tech data
+const techIcons = Object.fromEntries(
+    Object.entries(techIconsData).map(([key, data]) => [
+        key,
+        { ...data, icon: iconComponents[key] }
+    ])
+);
 
 export default function Works() {
     const sectionRef = useRef(null);
     const [hoveredCard, setHoveredCard] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
-
-    // Featured projects only (4 items)
-    const featuredProjects = [
-        {
-            id: "proj-01",
-            number: "01",
-            title: "Indo Dragonica",
-            subtitle: "Private Server Website",
-            description: "Indonesian community site for Dragonica Online, offering game guides, videos, and updates.",
-            thumbnail: "/img/project/idgn.webp",
-            demoLink: "https://www.indodragonica.com/",
-            position: { top: "10%", left: "5%", rotate: -8 },
-            techStack: ["nextjs", "tailwind", "gsap"],
-        },
-        {
-            id: "proj-02",
-            number: "02",
-            title: "Portfolio",
-            subtitle: "Website v1",
-            description: "Personal portfolio website showcasing skills and projects.",
-            thumbnail: "/img/project/personalweb.webp",
-            demoLink: "https://nanangmarvin-8ko8wl5tz-vinnns-projects.vercel.app/",
-            position: { top: "15%", right: "8%", rotate: 12 },
-            techStack: ["react", "tailwind", "javascript"],
-        },
-        {
-            id: "proj-03",
-            number: "03",
-            title: "QR Code",
-            subtitle: "Generator",
-            description: "Generate and download QR codes for various purposes.",
-            thumbnail: "/img/project/qrgenerator.webp",
-            demoLink: "https://slashmk303.github.io/qr-code-generate-simple/",
-            position: { bottom: "20%", left: "10%", rotate: 6 },
-            techStack: ["html", "css", "javascript"],
-        },
-        {
-            id: "proj-04",
-            number: "04",
-            title: "Genocide Egg",
-            subtitle: "Game Project",
-            description: "A game project made during college studies.",
-            thumbnail: "/img/project/genocideegg.webp",
-            demoLink: "https://marvin195.itch.io/genocide-egg",
-            position: { bottom: "15%", right: "5%", rotate: -10 },
-            techStack: ["unity", "csharp"],
-        },
-    ];
 
     const [cardRotations] = useState(() => {
         return Array.from({ length: featuredProjects.length }, () => ({

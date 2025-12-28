@@ -6,120 +6,31 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { SiReact, SiNextdotjs, SiTailwindcss, SiGreensock, SiHtml5, SiCss3, SiJavascript, SiUnity } from "react-icons/si";
+import { SiReact, SiNextdotjs, SiTailwindcss, SiGreensock, SiHtml5, SiCss3, SiJavascript, SiUnity, SiDotnet } from "react-icons/si";
+import { allProjects, categories, techIcons as techIconsData } from "@/data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Tech stack icon mapping
-const techIcons = {
-    react: { icon: SiReact, name: "React", color: "#61DAFB" },
-    nextjs: { icon: SiNextdotjs, name: "Next.js", color: "#ffffff" },
-    tailwind: { icon: SiTailwindcss, name: "Tailwind CSS", color: "#06B6D4" },
-    gsap: { icon: SiGreensock, name: "GSAP", color: "#88CE02" },
-    html: { icon: SiHtml5, name: "HTML5", color: "#E34F26" },
-    css: { icon: SiCss3, name: "CSS3", color: "#1572B6" },
-    javascript: { icon: SiJavascript, name: "JavaScript", color: "#F7DF1E" },
-    unity: { icon: SiUnity, name: "Unity", color: "#ffffff" },
+// Map icon components to tech data
+const iconComponents = {
+    react: SiReact,
+    nextjs: SiNextdotjs,
+    tailwind: SiTailwindcss,
+    gsap: SiGreensock,
+    html: SiHtml5,
+    css: SiCss3,
+    javascript: SiJavascript,
+    unity: SiUnity,
+    csharp: SiDotnet,
 };
 
-// All projects data
-const allProjects = [
-    {
-        id: "proj-01",
-        number: "01",
-        title: "Indo Dragonica",
-        subtitle: "Private Server Website",
-        category: "web",
-        description: "Indonesian community site for Dragonica Online, offering game guides, videos, and updates.",
-        thumbnail: "/img/project/idgn.webp",
-        demoLink: "https://www.indodragonica.com/",
-        techStack: ["nextjs", "tailwind", "gsap"],
-    },
-    {
-        id: "proj-02",
-        number: "02",
-        title: "Portfolio",
-        subtitle: "Website v1",
-        category: "web",
-        description: "Personal portfolio website showcasing skills and projects.",
-        thumbnail: "/img/project/personalweb.webp",
-        demoLink: "https://nanangmarvin-8ko8wl5tz-vinnns-projects.vercel.app/",
-        techStack: ["react", "tailwind", "javascript"],
-    },
-    {
-        id: "proj-03",
-        number: "03",
-        title: "QR Code",
-        subtitle: "Generator",
-        category: "generator",
-        description: "Generate and download QR codes for various purposes.",
-        thumbnail: "/img/project/qrgenerator.webp",
-        demoLink: "https://slashmk303.github.io/qr-code-generate-simple/",
-        techStack: ["html", "css", "javascript"],
-    },
-    {
-        id: "proj-04",
-        number: "04",
-        title: "Genocide Egg",
-        subtitle: "Game Project",
-        category: "game",
-        description: "A game project made during college studies.",
-        thumbnail: "/img/project/genocideegg.webp",
-        demoLink: "https://marvin195.itch.io/genocide-egg",
-        techStack: ["unity", "csharp"],
-    },
-    {
-        id: "proj-05",
-        number: "05",
-        title: "Demo App A",
-        subtitle: "Dummy Project",
-        category: "web",
-        description: "Prototype demo app for layout testing and visual polish.",
-        thumbnail: "/img/project/personalweb.webp",
-        demoLink: "https://example.com/demo-a",
-        techStack: ["react", "tailwind"],
-    },
-    {
-        id: "proj-06",
-        number: "06",
-        title: "Demo App B",
-        subtitle: "Dummy Project",
-        category: "web",
-        description: "UI/UX experiment used as a placeholder project.",
-        thumbnail: "/img/project/idgn.webp",
-        demoLink: "https://example.com/demo-b",
-        techStack: ["nextjs", "gsap"],
-    },
-    {
-        id: "proj-07",
-        number: "07",
-        title: "Demo App C",
-        subtitle: "Dummy Project",
-        category: "generator",
-        description: "Small interactive prototype for gallery testing.",
-        thumbnail: "/img/project/qrgenerator.webp",
-        demoLink: "https://example.com/demo-c",
-        techStack: ["javascript", "html"],
-    },
-    {
-        id: "proj-08",
-        number: "08",
-        title: "Demo App D",
-        subtitle: "Dummy Project",
-        category: "game",
-        description: "Placeholder project to simulate larger portfolios.",
-        thumbnail: "/img/project/genocideegg.webp",
-        demoLink: "https://example.com/demo-d",
-        techStack: ["unity", "csharp"],
-    },
-];
-
-const categories = [
-    { id: "all", label: "All" },
-    { id: "web", label: "Web" },
-    { id: "game", label: "Game" },
-    { id: "generator", label: "Generator" },
-];
+// Combine icon components with tech data
+const techIcons = Object.fromEntries(
+    Object.entries(techIconsData).map(([key, data]) => [
+        key,
+        { ...data, icon: iconComponents[key] }
+    ])
+);
 
 export default function WorksPage() {
     const sectionRef = useRef(null);
