@@ -21,6 +21,12 @@ export default function ScrollToTopButton() {
 
     const toggleVisibility = () => {
         const contactSection = document.querySelector('#contact');
+        // Guard against pages that don't have a contact section (e.g., /works)
+        if (!contactSection) {
+            // Fallback: show button after scrolling 500px
+            setIsVisible(window.scrollY > 500);
+            return;
+        }
         const contactSectionTop = contactSection.getBoundingClientRect().top;
         if (contactSectionTop <= window.innerHeight) {
             setIsVisible(true);

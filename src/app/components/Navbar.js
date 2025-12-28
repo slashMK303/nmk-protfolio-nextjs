@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -14,6 +14,20 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [showHamburgerOnDesktop, setShowHamburgerOnDesktop] = useState(false);
     const [showNavbar, setShowNavbar] = useState(true);
+    const hamburgerRef = useRef(null);
+    const pendingAnimationRef = useRef(false);
+
+    // Handle GSAP animation after hamburger button is rendered
+    useEffect(() => {
+        if (showHamburgerOnDesktop && pendingAnimationRef.current && hamburgerRef.current) {
+            gsap.fromTo(
+                hamburgerRef.current,
+                { scale: 0.5, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.5, ease: 'bounce.out' }
+            );
+            pendingAnimationRef.current = false;
+        }
+    }, [showHamburgerOnDesktop]);
 
     useEffect(() => {
         let lastScrollY = window.scrollY;
@@ -31,12 +45,8 @@ export default function Navbar() {
             trigger: "#whatido",
             start: "top 5%",
             onEnter: () => {
+                pendingAnimationRef.current = true;
                 setShowHamburgerOnDesktop(true);
-                gsap.fromTo(
-                    '.hamburger-btn',
-                    { scale: 0.5, opacity: 0 },
-                    { scale: 1, opacity: 1, duration: 0.5, ease: 'bounce.out' }
-                );
             },
             onLeaveBack: () => setShowHamburgerOnDesktop(false),
         });
@@ -67,6 +77,7 @@ export default function Navbar() {
 
             {showHamburgerOnDesktop && (
                 <motion.button
+                    ref={hamburgerRef}
                     className="hamburger-btn fixed top-4 right-6 z-50 bg-[#e8e8e3] px-3 py-4 rounded-full flex flex-col items-center justify-center gap-1 hover:cursor-pointer"
                     onClick={() => setIsOpen(!isOpen)}
                     whileHover={{ scale: 1.1 }}

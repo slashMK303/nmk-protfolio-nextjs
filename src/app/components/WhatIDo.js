@@ -229,9 +229,10 @@ export default function WhatIDo() {
                             if (indicatorFillRef.current) {
                                 gsap.to(indicatorFillRef.current, { height: `${progress * 100}%`, duration: 0.1, ease: 'none' });
                             }
-                            // Pulse active dot
-                            if (indicatorDotsRef.current[idx]) {
-                                gsap.fromTo(indicatorDotsRef.current[idx], { scale: 1 }, { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1, ease: 'power1.out' });
+                            // Pulse active dot (only if ref exists and has valid element)
+                            const dotElement = indicatorDotsRef.current?.[idx];
+                            if (dotElement) {
+                                gsap.fromTo(dotElement, { scale: 1 }, { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1, ease: 'power1.out' });
                             }
                         },
                     },

@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Nanang Marvin — Portfolio (Next.js)
+
+A personal portfolio website built with Next.js (App Router) showcasing projects, skills, and a contact form. The site focuses on performance, accessibility, and a polished visual presentation suitable for freelance and job opportunities.
+
+**Live demo:** https://nanangmarvin.my.id (replace with your deployment URL)
+
+**Status:** Production-ready — optimized images, LCP improvements, and clean build.
+
+## Key Features
+
+- Built with Next.js (App Router) and Tailwind CSS
+- Responsive, accessible layout and typographic scale
+- Optimized images (.webp) with Next.js Image component
+- Loading overlay for smooth first paint
+- Smooth scrolling handled by Lenis provider
+- Contact form endpoint at `/api/sendEmail`
+- Performance-minded (LCP, image loading, no render-blocking resources)
+
+## Tech Stack
+
+- Next.js (App Router)
+- React
+- Tailwind CSS
+- Framer Motion (animations)
+- GSAP (where applicable)
+- Lenis (smooth scrolling)
+- Vercel (recommended deployment)
+
+## Project Structure (important files)
+
+- `src/app/layout.js` — Root layout, global providers, and metadata
+- `src/app/globals.css` — Global styles and Tailwind import
+- `src/app/components/Hero.js` — Hero section (LCP image)
+- `src/app/components/Navbar.js` — Navigation and menu
+- `src/app/components/Works.js` — Project cards and images
+- `src/app/components/Contact.js` — Contact section UI
+- `src/app/api/sendEmail/route.js` — API route for contact form
+- `public/img/` — Images used by the site (converted to `.webp`)
 
 ## Getting Started
 
-First, run the development server:
+Prerequisites: Node.js (16+ recommended), npm or pnpm.
+
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run development server (PowerShell):
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```powershell
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Build for production:
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start production server (after build):
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+Vercel is recommended for zero-configuration deployment of Next.js apps. Connect your GitHub repository and deploy the `main` branch. The project is already configured to work with Vercel.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Notes & Recommendations
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Hero LCP: the hero image uses `loading="eager"` to improve Largest Contentful Paint.
+- If you add client-side hooks in files inside `src/app`, mark them with `"use client"` (hooks like `useEffect` are not allowed in Server Components).
+- When using Next.js `<Image />` with `fill` for responsive images, include a `sizes` prop to avoid build-time warnings.
+- Scroll behavior: the project uses Lenis; avoid setting `scroll-behavior` globally if Lenis is active.
+
+## Contact Form
+
+The contact form posts to `/api/sendEmail`. Verify environment variables required by your email provider (e.g., SMTP credentials or third-party API keys) are set in `.env` or your hosting environment.
+
+## Troubleshooting
+
+- Build errors related to React hooks in server files: move hook logic into a client component and import it inside your layout or page.
+- Image warnings: add `sizes` or appropriate `width`/`height` when using Next.js `Image`.
+- If you see unexpected scrollbar styling, check `src/app/globals.css` for leftover custom rules — this project currently uses the browser default scrollbars.
+
+## Contributing
+
+Feel free to open issues or pull requests. Keep changes focused, add tests where relevant, and run the build locally before pushing.
+
+## License
+
+See the `LICENSE` file in the repository.
+
+---
+
+If you'd like, I can also generate a short CONTRIBUTING.md, add CI (GitHub Actions) for lint/build, or create a deployment workflow. Which would you prefer next?
