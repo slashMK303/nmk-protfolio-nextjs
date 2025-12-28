@@ -1,28 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { SiReact, SiNextdotjs, SiTailwindcss, SiGreensock, SiHtml5, SiCss3, SiJavascript, SiUnity, SiDotnet } from "react-icons/si";
+import { iconComponents } from "@/utils/techIcons";
 import { featuredProjects, techIcons as techIconsData } from "@/data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
-
-// Map icon components to tech data
-const iconComponents = {
-    react: SiReact,
-    nextjs: SiNextdotjs,
-    tailwind: SiTailwindcss,
-    gsap: SiGreensock,
-    html: SiHtml5,
-    css: SiCss3,
-    javascript: SiJavascript,
-    unity: SiUnity,
-    csharp: SiDotnet,
-};
 
 // Combine icon components with tech data
 const techIcons = Object.fromEntries(
@@ -44,88 +31,100 @@ export default function Works() {
         }));
     });
 
-    useEffect(() => {
+    // Use useLayoutEffect for GSAP animations to handle DOM correctly before paint
+    useLayoutEffect(() => {
         if (!sectionRef.current) return;
 
         const checkMobile = () => setIsMobile(window.innerWidth < 768);
         checkMobile();
         window.addEventListener("resize", checkMobile);
 
-        // GSAP ScrollTrigger for floating cards
-        const cards = gsap.utils.toArray('.floating-card');
-        gsap.set(cards, { opacity: 0, y: 80, scale: 0.95 });
+        // GSAP ScrollTrigger context for proper cleanup
+        let ctx = gsap.context(() => {
+            // GSAP ScrollTrigger for floating cards
+            const cards = gsap.utils.toArray('.floating-card');
+            gsap.set(cards, { opacity: 0, y: 80, scale: 0.95 });
 
-        ScrollTrigger.batch(cards, {
-            interval: 0.1,
-            batchMax: 4,
-            onEnter: (batch) => {
-                gsap.to(batch, {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    stagger: 0.06,
-                    duration: 0.8,
-                    ease: 'power3.out',
-                });
-            },
-            once: false,
-            start: 'top 80%'
-        });
+            ScrollTrigger.batch(cards, {
+                interval: 0.1,
+                batchMax: 4,
+                onEnter: (batch) => {
+                    gsap.to(batch, {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        stagger: 0.06,
+                        duration: 0.8,
+                        ease: 'power3.out',
+                        overwrite: true // Ensure we override any existing tweens
+                    });
+                },
+                onLeaveBack: (batch) => {
+                    // Optional: Reset when scrolling back up?
+                    // For now keep it simple to avoid jumping
+                },
+                once: false,
+                start: 'top 85%' // Trigger slightly earlier
+            });
 
-        // 3D tilt effect on mouse move (desktop only)
-        cards.forEach((card, index) => {
-            let tiltTimeline = null;
-            const cardElement = card.querySelector('[data-card-inner]');
-            if (cardElement && cardRotations[index]) {
-                gsap.set(cardElement, {
-                    rotationX: cardRotations[index].rotateX,
-                    rotationY: cardRotations[index].rotateY,
-                    transformPerspective: 1200,
-                });
-            }
+            // 3D tilt effect on mouse move (desktop only)
+            cards.forEach((card, index) => {
+                let tiltTimeline = null;
+                const cardElement = card.querySelector('[data-card-inner]');
+                if (cardElement && cardRotations[index]) {
+                    // Set initial rotation
+                    gsap.set(cardElement, {
+                        rotationX: cardRotations[index].rotateX,
+                        rotationY: cardRotations[index].rotateY,
+                        transformPerspective: 1200,
+                    });
 
-            const handleMouseMove = (e) => {
-                if (isMobile) return;
-                const el = card.querySelector('[data-card-inner]');
-                if (!el) return;
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -12;
-                const rotateY = ((x - centerX) / centerX) * 12;
-                if (tiltTimeline) tiltTimeline.kill();
-                tiltTimeline = gsap.to(el, {
-                    rotationX: rotateX,
-                    rotationY: rotateY,
-                    transformPerspective: 1200,
-                    duration: 0.3,
-                    ease: 'power2.out',
-                });
-            };
+                    const handleMouseMove = (e) => {
+                        if (window.innerWidth < 768) return; // Use dynamic check
+                        const el = card.querySelector('[data-card-inner]');
+                        if (!el) return;
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        const rotateX = ((y - centerY) / centerY) * -12;
+                        const rotateY = ((x - centerX) / centerX) * 12;
 
-            const handleMouseLeave = () => {
-                const el = card.querySelector('[data-card-inner]');
-                if (!el) return;
-                if (tiltTimeline) tiltTimeline.kill();
-                gsap.to(el, {
-                    rotationX: cardRotations[index]?.rotateX || 0,
-                    rotationY: cardRotations[index]?.rotateY || 0,
-                    duration: 0.6,
-                    ease: 'power2.out',
-                });
-            };
+                        if (tiltTimeline) tiltTimeline.kill();
+                        tiltTimeline = gsap.to(el, {
+                            rotationX: rotateX,
+                            rotationY: rotateY,
+                            transformPerspective: 1200,
+                            duration: 0.3,
+                            ease: 'power2.out',
+                        });
+                    };
 
-            card.addEventListener('mousemove', handleMouseMove);
-            card.addEventListener('mouseleave', handleMouseLeave);
-        });
+                    const handleMouseLeave = () => {
+                        const el = card.querySelector('[data-card-inner]');
+                        if (!el) return;
+                        if (tiltTimeline) tiltTimeline.kill();
+                        gsap.to(el, {
+                            rotationX: cardRotations[index]?.rotateX || 0,
+                            rotationY: cardRotations[index]?.rotateY || 0,
+                            duration: 0.6,
+                            ease: 'power2.out',
+                        });
+                    };
+
+                    card.addEventListener('mousemove', handleMouseMove);
+                    card.addEventListener('mouseleave', handleMouseLeave);
+                }
+            });
+
+        }, sectionRef); // Scope to sectionRef
 
         return () => {
             window.removeEventListener("resize", checkMobile);
-            ScrollTrigger.getAll().forEach((t) => t.kill());
+            ctx.revert(); // Cleanup all GSAP animations/triggers created in this context
         };
-    }, [cardRotations, isMobile]);
+    }, [cardRotations]);
 
     return (
         <section

@@ -6,23 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { SiReact, SiNextdotjs, SiTailwindcss, SiGreensock, SiHtml5, SiCss3, SiJavascript, SiUnity, SiDotnet } from "react-icons/si";
+import { iconComponents } from "@/utils/techIcons";
 import { allProjects, categories, techIcons as techIconsData } from "@/data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
-
-// Map icon components to tech data
-const iconComponents = {
-    react: SiReact,
-    nextjs: SiNextdotjs,
-    tailwind: SiTailwindcss,
-    gsap: SiGreensock,
-    html: SiHtml5,
-    css: SiCss3,
-    javascript: SiJavascript,
-    unity: SiUnity,
-    csharp: SiDotnet,
-};
 
 // Combine icon components with tech data
 const techIcons = Object.fromEntries(
