@@ -58,6 +58,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="ad7b4a88-2206-4945-96b5-7bda6dda5fff"></script>
         <link rel="preload" as="image" href="/img/hero.webp" />
         <script
           type="application/ld+json"
