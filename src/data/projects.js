@@ -9,7 +9,13 @@ export const allProjects = [
         description: "Marvin Towing is a towing company website.",
         thumbnail: "/img/project/marvin-towing.webp",
         demoLink: "https://marvin-towing.vercel.app/",
+        githubLink: "https://github.com/slashMK303/jaya-towing",
         techStack: ["nextjs", "tailwind", "postgresql", "vercel"],
+        highlights: [
+            "Full-stack Next.js with API routes",
+            "PostgreSQL database integration",
+            "Responsive booking system"
+        ],
         position: { top: "10%", left: "5%", rotate: -8 },
     },
     {
@@ -22,7 +28,13 @@ export const allProjects = [
         description: "Vin Top Up is a top-up website.",
         thumbnail: "/img/project/vin-topup.webp",
         demoLink: "https://vintopup.vercel.app/",
+        githubLink: "https://github.com/slashMK303/vintopup",
         techStack: ["react", "laravel", "tailwind", "mysql"],
+        highlights: [
+            "Payment gateway integration",
+            "Real-time transaction tracking",
+            "Admin dashboard"
+        ],
         position: { top: "15%", right: "8%", rotate: 12 },
     },
     {
@@ -35,7 +47,13 @@ export const allProjects = [
         description: "Kotak Cerita adalah sebuah aplikasi web sederhana yang memungkinkan pengguna untuk berbagi cerita atau keluh kesah secara anonim. Aplikasi ini dibuat menggunakan Next.js dan Firebase.",
         thumbnail: "/img/project/kotak-cerita.webp",
         demoLink: "https://kotak-cerita.vercel.app/",
+        githubLink: "https://github.com/slashMK303/kotak-cerita",
         techStack: ["react", "tailwind", "firebase"],
+        highlights: [
+            "Anonymous posting system",
+            "Real-time Firebase sync",
+            "Responsive mobile-first design"
+        ],
         position: { bottom: "20%", left: "10%", rotate: 6 },
     },
     {
@@ -48,7 +66,13 @@ export const allProjects = [
         description: "A game project made during college studies.",
         thumbnail: "/img/project/genocideegg.webp",
         demoLink: "https://marvin195.itch.io/genocide-egg",
+        githubLink: null,
         techStack: ["unity"],
+        highlights: [
+            "Unity 2D game development",
+            "Custom game mechanics",
+            "Published on itch.io"
+        ],
         position: { bottom: "15%", right: "5%", rotate: -10 },
     },
     {
@@ -61,7 +85,13 @@ export const allProjects = [
         description: "Indonesian community site for Dragonica Online, offering game guides, videos, and updates.",
         thumbnail: "/img/project/idgn.webp",
         demoLink: "https://www.indodragonica.com/",
+        githubLink: null,
         techStack: ["react", "tailwind", "laravel"],
+        highlights: [
+            "Active community platform",
+            "Game guides & tutorials",
+            "Video content integration"
+        ],
     },
     {
         id: "proj-06",
@@ -73,7 +103,13 @@ export const allProjects = [
         description: "Generate and download QR codes for various purposes.",
         thumbnail: "/img/project/qrgenerator.webp",
         demoLink: "https://slashmk303.github.io/qr-code-generate-simple/",
+        githubLink: "https://github.com/slashMK303/qr-code-generate-simple",
         techStack: ["html", "css", "javascript"],
+        highlights: [
+            "Pure vanilla JavaScript",
+            "Instant QR generation",
+            "Download as image"
+        ],
     },
     {
         id: "proj-07",
@@ -85,7 +121,13 @@ export const allProjects = [
         description: "Granite Chat AI is a chatbot application implemented using Granite AI API.",
         thumbnail: "/img/project/granite-ai.webp",
         demoLink: "https://granite-chat-app.vercel.app/",
+        githubLink: "https://github.com/slashMK303/granite-chat-app",
         techStack: ["react", "tailwind", "vercel"],
+        highlights: [
+            "AI API integration",
+            "Real-time chat interface",
+            "Context-aware responses"
+        ],
     },
     {
         id: "proj-08",
@@ -97,7 +139,13 @@ export const allProjects = [
         description: "Personal website for showcasing projects and skills.",
         thumbnail: "/img/project/personal-website.webp",
         demoLink: "https://nanangmarvin.my.id/",
+        githubLink: "https://github.com/slashMK303/nmk-protfolio-nextjs",
         techStack: ["nextjs", "gsap", "tailwind", "vercel", "framer"],
+        highlights: [
+            "GSAP animations",
+            "Smooth scroll with Lenis",
+            "SEO optimized"
+        ],
     },
 ];
 

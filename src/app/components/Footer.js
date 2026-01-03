@@ -13,9 +13,9 @@ export default function Footer() {
                 minute: "2-digit",
                 second: "2-digit",
                 hour12: true,
-                timeZoneName: "short",
+                timeZone: "Asia/Jakarta", // Force WIB timezone
             };
-            const formattedTime = now.toLocaleTimeString("id-ID", options);
+            const formattedTime = now.toLocaleTimeString("en-US", options) + " WIB";
             setLocalTime(formattedTime);
         };
 
