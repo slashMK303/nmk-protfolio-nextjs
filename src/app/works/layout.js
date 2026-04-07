@@ -56,6 +56,7 @@ export default function WorksLayout({ children }) {
                 name: project.title,
                 description: project.description,
                 url: project.demoLink,
+                image: `https://nanangmarvin.my.id${project.thumbnail}`,
                 codeRepository: project.githubLink || undefined,
                 author: {
                     "@type": "Person",
