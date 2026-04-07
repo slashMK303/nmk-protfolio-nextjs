@@ -4,7 +4,23 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
   try {
-    const { name, email, message } = await req.json();
+    const { name, email, message, captchaToken } = await req.json();
+
+    // Verify Cloudflare Turnstile
+    const recaptchaResponse = await fetch(
+      `https://challenges.cloudflare.com/turnstile/v0/siteverify`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${process.env.TURNSTILE_SECRET_KEY}&response=${captchaToken}`,
+      }
+    );
+
+    const recaptchaData = await recaptchaResponse.json();
+
+    if (!recaptchaData.success) {
+      return new Response(JSON.stringify({ error: 'Verifikasi CAPTCHA gagal. Silakan coba lagi.' }), { status: 400 });
+    }
 
     const html = `
       <div style="font-family: 'Inter', sans-serif; background-color: #f3f4f6; padding: 2rem; border-radius: 0.75rem; color: #111827;">
@@ -34,7 +50,7 @@ export async function POST(req) {
 
     return Response.json({ success: true });
   } catch (error) {
-    console.error('Resend Error:', error);
+    console.error('API Error:', error);
     return new Response(JSON.stringify({ error: 'Gagal mengirim email' }), { status: 500 });
   }
 }
