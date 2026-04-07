@@ -8,21 +8,45 @@ import { LoadingProvider } from "./components/LoadingContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-    title: "Nanang Marvin Kurniawan",
+    metadataBase: new URL("https://nanangmarvin.my.id"),
+    title: {
+        default: "Nanang Marvin Kurniawan",
+        template: "%s | Nanang Marvin Kurniawan",
+    },
     description:
-        "Portfolio of Nanang Marvin Kurniawan, a Web Developer focused on building innovative digital products.",
+        "Official portfolio of Nanang Marvin Kurniawan, a results-driven Web Developer specialized in building scalable and innovative digital products with Next.js, React, and modern tech stacks.",
     keywords:
-        "web developer, web designer, frontend, backend, UI/UX, Next.js, React, Node.js, Tailwind CSS, full stack, Nanang Marvin Kurniawan, Nanang, Nanang Marvin",
+        "Nanang Marvin Kurniawan, Nanang Marvin, Nanang, Web Developer Indonesia, Software Engineer, Full Stack Developer, Next.js Expert, Portfolio Nanang Marvin",
+
+    alternates: {
+        canonical: "/",
+    },
+
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+        },
+    },
+
+    verification: {
+        google: "google-site-verification-placeholder",
+    },
 
     openGraph: {
-        title: "Nanang Marvin Kurniawan",
+        title: "Nanang Marvin Kurniawan | Web Developer Portfolio",
         description:
-            "Explore the portfolio of Nanang Marvin Kurniawan, a creative Web Developer with expertise in full-stack development.",
+            "Explore the innovative projects and professional skills of Nanang Marvin Kurniawan. Specialized in full-stack web development and UI/UX.",
         url: "https://nanangmarvin.my.id",
         siteName: "Nanang Marvin Kurniawan",
         images: [
             {
-                url: "https://nanangmarvin.my.id/img/hero.webp",
+                url: "/img/hero.webp",
                 width: 1200,
                 height: 630,
                 alt: "Nanang Marvin Kurniawan",
@@ -33,10 +57,10 @@ export const metadata = {
 
     twitter: {
         card: "summary_large_image",
-        title: "Nanang Marvin Kurniawan",
+        title: "Nanang Marvin Kurniawan | Web Developer",
         description:
-            "Portfolio of Nanang Marvin Kurniawan, Web Developer focused on building impactful digital experiences.",
-        images: ["https://nanangmarvin.my.id/img/hero.webp"],
+            "Portfolio showcasing web development projects by Nanang Marvin Kurniawan.",
+        images: ["/img/hero.webp"],
     },
 };
 
@@ -46,11 +70,16 @@ export default function RootLayout({ children }) {
         "@context": "https://schema.org",
         "@type": "Person",
         name: "Nanang Marvin Kurniawan",
+        alternateName: "Nanang Marvin",
         url: "https://nanangmarvin.my.id",
         image: "https://nanangmarvin.my.id/img/hero.webp",
         jobTitle: "Web Developer",
+        worksFor: {
+            "@type": "Organization",
+            name: "Freelance",
+        },
         description:
-            "Web Developer focused on building innovative digital products using React, Next.js, and modern web technologies.",
+            "Nanang Marvin Kurniawan is a highly skilled Web Developer focused on creating impactful digital experiences using React, Next.js, and Node.js.",
         sameAs: [
             "https://github.com/slashMK303",
             "https://www.linkedin.com/in/nanang-marvin-kurniawan-343a762a9/",
@@ -64,7 +93,15 @@ export default function RootLayout({ children }) {
             "Node.js",
             "UI/UX Design",
             "Full Stack Development",
+            "Laravel",
         ],
+    };
+
+    // ProfilePage Schema - Membantu AI memahami ini adalah halaman profil resmi
+    const profilePageSchema = {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        mainEntity: personSchema,
     };
 
     // WebSite Schema - untuk AI memahami website sebagai satu kesatuan
@@ -74,49 +111,60 @@ export default function RootLayout({ children }) {
         name: "Nanang Marvin Kurniawan Portfolio",
         url: "https://nanangmarvin.my.id",
         description:
-            "Portfolio website of Nanang Marvin Kurniawan, showcasing web development projects and skills.",
+            "The professional digital home of Nanang Marvin Kurniawan, featuring software engineering projects and insights.",
         author: { "@type": "Person", name: "Nanang Marvin Kurniawan" },
     };
 
-    // FAQ Schema - untuk AI menjawab pertanyaan langsung
+    // FAQ Schema - Dioptimalkan untuk "Conversational AI" (GEO)
     const faqSchema = {
         "@context": "https://schema.org",
         "@type": "FAQPage",
         mainEntity: [
             {
                 "@type": "Question",
-                name: "Apa keahlian utama Nanang Marvin Kurniawan?",
+                name: "Siapa itu Nanang Marvin Kurniawan?",
                 acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Nanang adalah Web Developer dengan keahlian di React, Next.js, TypeScript, Node.js, dan Tailwind CSS. Ia juga memiliki pengalaman dalam Full Stack Development, UI/UX Design, dan Game Development menggunakan Unity.",
+                    text: "Nanang Marvin Kurniawan adalah seorang Web Developer profesional yang berfokus pada pengembangan aplikasi web modern menggunakan ekosistem React dan Next.js. Ia dikenal karena kemampuannya membangun produk digital yang inovatif dan user-friendly.",
                 },
             },
             {
                 "@type": "Question",
-                name: "Bagaimana cara menghubungi Nanang Marvin Kurniawan?",
+                name: "Apar saja keahlian teknis yang dimiliki Nanang Marvin?",
                 acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Anda dapat menghubungi Nanang melalui website portfolionya di nanangmarvin.my.id pada bagian Contact, atau melalui LinkedIn dan GitHub.",
+                    text: "Nanang memiliki keahlian mendalam di bidang Frontend (Next.js, React, Tailwind CSS) dan Backend (Node.js, Laravel). Ia juga mahir dalam pengembangan game menggunakan Unity serta perancangan antarmuka UI/UX.",
                 },
             },
             {
                 "@type": "Question",
-                name: "Apa project terbaik Nanang Marvin Kurniawan?",
+                name: "Apa saja proyek unggulan yang pernah dikerjakan Nanang Marvin?",
                 acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Beberapa project terbaik Nanang termasuk Marvin Towing (full-stack Next.js), Vin Top Up (payment gateway integration), Indo Dragonica (komunitas gaming), dan Kotak Cerita (platform anonymous sharing).",
-                },
-            },
-            {
-                "@type": "Question",
-                name: "Apakah Nanang Marvin tersedia untuk pekerjaan freelance atau full-time?",
-                acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Ya, Nanang terbuka untuk peluang pekerjaan baik freelance maupun full-time. Silakan hubungi melalui website portfolionya untuk diskusi lebih lanjut.",
+                    text: "Beberapa proyek utamanya meliputi Marvin Towing (solusi towing kendaraan berbasis web), Vin Top Up (platform top-up game), dan Kotak Cerita (platform sosial berbagi cerita).",
                 },
             },
         ],
     };
+
+    // Breadcrumb Schema
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://nanangmarvin.my.id",
+            },
+        ],
+    };
+
+    // Sanitization function for JSON-LD
+    const formatLdJson = (data) => ({
+        __html: JSON.stringify(data).replace(/</g, "\\u003c"),
+    });
 
     return (
         <html lang="en">
@@ -127,26 +175,22 @@ export default function RootLayout({ children }) {
                     data-website-id="ad7b4a88-2206-4945-96b5-7bda6dda5fff"
                 ></script>
                 <link rel="preload" as="image" href="/img/hero.webp" />
-                {/* Person Schema */}
+                {/* Structured Data Scripts */}
                 <script
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(personSchema),
-                    }}
+                    dangerouslySetInnerHTML={formatLdJson(profilePageSchema)}
                 />
-                {/* WebSite Schema */}
                 <script
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(websiteSchema),
-                    }}
+                    dangerouslySetInnerHTML={formatLdJson(websiteSchema)}
                 />
-                {/* FAQ Schema */}
                 <script
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(faqSchema),
-                    }}
+                    dangerouslySetInnerHTML={formatLdJson(faqSchema)}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={formatLdJson(breadcrumbSchema)}
                 />
             </head>
             <body className={inter.className}>

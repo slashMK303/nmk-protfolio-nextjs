@@ -1,35 +1,27 @@
 import { allProjects } from "@/data/projects";
 
 export const metadata = {
-    title: "Works | Nanang Marvin Kurniawan",
+    title: "Works",
     description:
-        "Explore my complete portfolio of web development projects, games, and creative works. View project details, tech stacks, and live demos.",
-    keywords:
-        "portfolio, projects, web development, games, Nanang Marvin Kurniawan, React, Next.js, Unity",
-
+        "Detailed portfolio of web development projects, including Next.js applications, Laravel systems, and Unity games by Nanang Marvin Kurniawan.",
+    alternates: {
+        canonical: "/works",
+    },
     openGraph: {
-        title: "Works | Nanang Marvin Kurniawan",
+        title: "Works | Nanang Marvin Kurniawan Projects",
         description:
-            "Explore my complete portfolio of web development projects, games, and creative works.",
+            "Explore the collection of digital products and experiments built by Nanang Marvin Kurniawan. From full-stack apps to game dev.",
         url: "https://nanangmarvin.my.id/works",
         siteName: "Nanang Marvin Kurniawan",
         images: [
             {
-                url: "https://nanangmarvin.my.id/img/hero.webp",
+                url: "/img/hero.webp",
                 width: 1200,
                 height: 630,
                 alt: "Portfolio of Nanang Marvin Kurniawan",
             },
         ],
         type: "website",
-    },
-
-    twitter: {
-        card: "summary_large_image",
-        title: "Works | Nanang Marvin Kurniawan",
-        description:
-            "Explore my complete portfolio of web development projects, games, and creative works.",
-        images: ["https://nanangmarvin.my.id/img/hero.webp"],
     },
 };
 
@@ -53,9 +45,9 @@ export default function WorksLayout({ children }) {
     const projectsSchema = {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        name: "Portfolio Projects by Nanang Marvin Kurniawan",
+        name: "Professional Portfolio Projects by Nanang Marvin Kurniawan",
         description:
-            "A collection of web development projects, games, and creative works.",
+            "A curated collection of web development projects, game development, and software engineering works.",
         itemListElement: allProjects.map((project, index) => ({
             "@type": "ListItem",
             position: index + 1,
@@ -65,7 +57,11 @@ export default function WorksLayout({ children }) {
                 description: project.description,
                 url: project.demoLink,
                 codeRepository: project.githubLink || undefined,
-                author: { "@type": "Person", name: "Nanang Marvin Kurniawan" },
+                author: {
+                    "@type": "Person",
+                    name: "Nanang Marvin Kurniawan",
+                    url: "https://nanangmarvin.my.id",
+                },
                 programmingLanguage:
                     project.techStack
                         ?.map((tech) => techToLanguage[tech])
@@ -76,12 +72,44 @@ export default function WorksLayout({ children }) {
         })),
     };
 
+    // Breadcrumb Schema for /works
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://nanangmarvin.my.id",
+            },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: "Works",
+                item: "https://nanangmarvin.my.id/works",
+            },
+        ],
+    };
+
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(projectsSchema),
+                    __html: JSON.stringify(projectsSchema).replace(
+                        /</g,
+                        "\\u003c",
+                    ),
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(breadcrumbSchema).replace(
+                        /</g,
+                        "\\u003c",
+                    ),
                 }}
             />
             {children}
