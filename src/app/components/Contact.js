@@ -21,7 +21,7 @@ export default function Contact() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!captchaToken) {
             setToast({ message: 'Harap selesaikan verifikasi keamanan terlebih dahulu.', type: 'error' });
             return;
@@ -59,10 +59,10 @@ export default function Contact() {
 
     return (
         <section className="bg-[#e8e8e8]">
-            <Toast 
-                message={toast.message} 
-                type={toast.type} 
-                onClose={() => setToast({ message: '', type: 'success' })} 
+            <Toast
+                message={toast.message}
+                type={toast.type}
+                onClose={() => setToast({ message: '', type: 'success' })}
             />
 
             <div className="h-full text-center md:p-10 p-4 mx-4 md:mx-8 rounded-2xl bg-gradient-to-b from-[#121212] to-[#414141]">
@@ -110,7 +110,7 @@ export default function Contact() {
 
                     {/* Turnstile Security Check */}
                     <div className="mb-10 flex justify-center md:justify-start">
-                        <div className="overflow-hidden rounded-xl">
+                        <div className="overflow-visible">
                             <Turnstile
                                 ref={turnstileRef}
                                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
