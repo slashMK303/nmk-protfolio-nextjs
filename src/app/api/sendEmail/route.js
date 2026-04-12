@@ -23,21 +23,55 @@ export async function POST(req) {
     }
 
     const html = `
-      <div style="font-family: 'Inter', sans-serif; background-color: #f3f4f6; padding: 2rem; border-radius: 0.75rem; color: #111827;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #1f2937;">
-          📬 Pesan Baru dari Website Anda
-        </h2>
-        <div style="background-color: #ffffff; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 2px 6px rgba(0,0,0,0.05); line-height: 1.6;">
-          <p><strong>👤 Nama:</strong> ${name}</p>
-          <p><strong>✉️ Email:</strong> ${email}</p>
-          <p><strong>📝 Pesan:</strong></p>
-          <blockquote style="margin-top: 1rem; padding-left: 1rem; border-left: 4px solid #9ca3af; color: #374151;">
-            ${message.replace(/\n/g, '<br />')}
-          </blockquote>
+      <div style="background-color: #f9fafb; padding: 40px 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #111827;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border: 1px solid #e5e7eb;">
+          
+          <!-- Header -->
+          <div style="background-color: #111827; padding: 32px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.025em; text-transform: uppercase;">
+              New Inquiry
+            </h1>
+            <p style="color: #9ca3af; margin-top: 8px; font-size: 14px;">Incoming message from your portfolio website</p>
+          </div>
+
+          <!-- Body -->
+          <div style="padding: 40px;">
+            
+            <div style="margin-bottom: 32px;">
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Sender Name</label>
+              <div style="font-size: 18px; font-weight: 600; color: #111827;">${name}</div>
+            </div>
+
+            <div style="margin-bottom: 32px;">
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Email Address</label>
+              <a href="mailto:${email}" style="font-size: 16px; color: #2563eb; text-decoration: none; font-weight: 500;">
+                ${email}
+              </a>
+            </div>
+
+            <div style="border-top: 1px solid #f3f4f6; padding-top: 32px;">
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Message Content</label>
+              <div style="background-color: #f3f4f6; padding: 24px; border-radius: 12px; font-size: 16px; line-height: 1.6; color: #374151; white-space: pre-wrap;">
+                ${message.replace(/\n/g, '<br />')}
+              </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center;">
+              <a href="mailto:${email}" style="display: inline-block; background-color: #111827; color: #ffffff; padding: 16px 32px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px;">
+                Reply Directly
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Footer -->
+          <div style="background-color: #f9fafb; padding: 24px; text-align: center; border-top: 1px solid #f3f4f6;">
+            <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+              Sent via nanangmarvin.my.id
+            </p>
+          </div>
+
         </div>
-        <footer style="font-size: 0.75rem; margin-top: 2rem; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 1rem;">
-          Email ini dikirim otomatis dari formulir kontak <strong>nanangmarvin.my.id</strong>
-        </footer>
       </div>
     `;
 
