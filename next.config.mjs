@@ -10,15 +10,16 @@ const nextConfig = {
                         key: 'Content-Security-Policy',
                         value:
                             "default-src 'self'; " +
-                            "script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com 'unsafe-inline'; " +
-                            "connect-src 'self' https://challenges.cloudflare.com https://api.resend.com https://api.github.com; " +
+                            "script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com https://www.googletagmanager.com https://www.google-analytics.com https://cloud.umami.is 'unsafe-inline'; " +
+                            "script-src-elem 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com https://www.googletagmanager.com https://www.google-analytics.com https://cloud.umami.is; " +
+                            "connect-src 'self' https://challenges.cloudflare.com https://api.resend.com https://api.github.com https://www.google-analytics.com https://cloud.umami.is; " +
                             "frame-src https://challenges.cloudflare.com; " +
-                            "img-src 'self' data: https://challenges.cloudflare.com; " +
+                            "img-src 'self' data: https://challenges.cloudflare.com https://www.google-analytics.com; " +
                             "style-src 'self' 'unsafe-inline';"
                     },
                     {
                         key: 'Permissions-Policy',
-                        // Disable WebXR spatial tracking to silence related warnings
+                        // Keep only recognized/necessary features to avoid browser warnings
                         value: 'xr-spatial-tracking=()'
                     }
                 ]
