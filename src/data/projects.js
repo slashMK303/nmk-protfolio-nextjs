@@ -48,7 +48,7 @@ export const allProjects = [
         thumbnail: "/img/project/naraf.webp",
         demoLink: "https://naraf.nanangmarvin.my.id/",
         githubLink: null,
-        techStack: ["nextjs", "tailwind", "mysql"],
+        techStack: ["php", "tailwind", "mysql", "qris"],
         highlights: [
             "Sistem otomatis",
             "Transaksi instan",
@@ -228,6 +228,9 @@ export const techIcons = {
     redis: { name: "Redis", color: "#DC382D" },
     sqlite: { name: "SQLite", color: "#003B57" },
     graphql: { name: "GraphQL", color: "#E10098" },
+
+    // Payment Gateway
+    qris: { name: "QRIS", color: "#ED2839" },
 
     // Tools & Platforms
     git: { name: "Git", color: "#F05032" },
