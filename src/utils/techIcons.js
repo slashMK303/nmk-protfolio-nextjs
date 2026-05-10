@@ -8,6 +8,7 @@ import {
     // Tools & Platforms
     SiGit, SiGithub, SiDocker, SiKubernetes, SiAmazon, SiGooglecloud, SiVercel, SiNetlify, SiHeroku, SiFigma, SiAdobephotoshop, SiUnity, SiUnrealengine, SiFlutter, SiAndroid, SiIos
 } from "react-icons/si";
+import { FaQrcode } from "react-icons/fa";
 
 // Shared mapping for all tech icons
 // Usage: import { iconComponents } from "@/utils/techIcons";
@@ -62,6 +63,9 @@ export const iconComponents = {
     redis: SiRedis,
     sqlite: SiSqlite,
     graphql: SiGraphql,
+
+    // Payment Gateway
+    qris: FaQrcode,
 
     // Tools & Mobile
     git: SiGit,
