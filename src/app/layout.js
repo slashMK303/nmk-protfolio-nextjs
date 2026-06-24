@@ -4,6 +4,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import LenisProvider from "./providers/LenisProvider";
 import LoadingScreen from "./components/LoadingScreen";
 import { LoadingProvider } from "./components/LoadingContext";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -169,11 +170,11 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en">
             <head>
-                <script
-                    defer
+                <Script
                     src="https://cloud.umami.is/script.js"
                     data-website-id="ad7b4a88-2206-4945-96b5-7bda6dda5fff"
-                ></script>
+                    strategy="lazyOnload"
+                />
                 <link rel="preload" as="image" href="/img/hero.webp" />
                 {/* Structured Data Scripts */}
                 <script

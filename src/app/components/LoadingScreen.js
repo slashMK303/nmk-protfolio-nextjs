@@ -56,14 +56,6 @@ export default function LoadingScreen() {
 
         // Use shared preload util to avoid duplicate loads across components
 
-        const pageLoadPromise = new Promise((resolve) => {
-            if (document.readyState === "complete") {
-                resolve();
-            } else {
-                window.addEventListener("load", resolve, { once: true });
-            }
-        });
-
         // Start with small percent to show progress
         setPercent(5);
 
@@ -77,22 +69,18 @@ export default function LoadingScreen() {
                 })
             )
         ).then(() => {
-            // assets done; wait for page load as final step
-            pageLoadPromise.then(() => {
-                // ensure percent reaches 100 before finish, animate increase
-                gsap.to({ val: percent }, {
-                    val: 100,
-                    duration: 0.8,
-                    ease: 'power2.out',
-                    onUpdate() {
-                        // round current value
-                        const v = Math.round(this.targets()[0].val);
-                        setPercent(v);
-                    },
-                    onComplete() {
-                        finish();
-                    },
-                });
+            // assets done; animate percent to 100 and finish immediately (no window load blocking)
+            gsap.to({ val: percent }, {
+                val: 100,
+                duration: 0.5,
+                ease: 'power2.out',
+                onUpdate() {
+                    const v = Math.round(this.targets()[0].val);
+                    setPercent(v);
+                },
+                onComplete() {
+                    finish();
+                },
             });
         });
         // Fallback timeout agar tidak stuck

@@ -61,7 +61,7 @@ export default function Hero() {
                                 height={300}
                                 className="rounded-lg object-cover w-full h-auto"
                                 style={{ width: "100%", height: "auto" }}
-                                loading="eager"
+                                priority
                             />
                         </div>
                     </div>

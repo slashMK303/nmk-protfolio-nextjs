@@ -19,22 +19,6 @@ export default function ScrollToTopButton() {
         };
     }, []);
 
-    const toggleVisibility = () => {
-        const contactSection = document.querySelector('#contact');
-        // Guard against pages that don't have a contact section (e.g., /works)
-        if (!contactSection) {
-            // Fallback: show button after scrolling 500px
-            setIsVisible(window.scrollY > 500);
-            return;
-        }
-        const contactSectionTop = contactSection.getBoundingClientRect().top;
-        if (contactSectionTop <= window.innerHeight) {
-            setIsVisible(true);
-        } else {
-            setIsVisible(false);
-        }
-    };
-
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -43,9 +27,32 @@ export default function ScrollToTopButton() {
     };
 
     useEffect(() => {
-        window.addEventListener('scroll', toggleVisibility);
+        const contactSection = document.querySelector('#contact');
+        if (!contactSection) {
+            // Fallback for pages without #contact (e.g., /works)
+            const handleScroll = () => {
+                setIsVisible(window.scrollY > 500);
+            };
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            return () => {
+                window.removeEventListener('scroll', handleScroll);
+            };
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry.isIntersecting);
+            },
+            {
+                root: null,
+                threshold: 0.1,
+            }
+        );
+
+        observer.observe(contactSection);
+
         return () => {
-            window.removeEventListener('scroll', toggleVisibility);
+            observer.disconnect();
         };
     }, []);
 
