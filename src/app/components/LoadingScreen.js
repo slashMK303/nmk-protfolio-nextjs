@@ -22,7 +22,7 @@ export default function LoadingScreen() {
         document.body.classList.add("loading-lock");
 
         // Set state awal animasi
-        gsap.set(overlay, { y: 0 });
+        gsap.set(".loading-column", { y: 0 });
         gsap.set(text, { opacity: 1, y: 0 });
 
         const finish = () => {
@@ -30,23 +30,29 @@ export default function LoadingScreen() {
             if (finish.called) return;
             finish.called = true;
 
-            const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-            tl.to(text, { opacity: 0.6, y: -6, duration: 0.6 })
-                .to(
-                    overlay,
-                    {
-                        y: "-100%",
-                        duration: 0.9,
-                        ease: "power3.inOut",
-                        delay: 0.2,
-                        onComplete: () => {
-                            document.body.classList.remove("loading-lock");
-                            setDone(true);
-                            setGlobalDone(true);
-                        },
-                    },
-                    "<"
-                );
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    document.body.classList.remove("loading-lock");
+                    setDone(true);
+                    setGlobalDone(true);
+                }
+            });
+
+            // Fade out text first, then stagger columns slide-up from right to left
+            tl.to(text, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" })
+              .to(
+                  ".loading-column",
+                  {
+                      y: "-100%",
+                      duration: 0.8,
+                      ease: "power3.inOut",
+                      stagger: {
+                          each: 0.1,
+                          from: "end"
+                      }
+                  },
+                  "-=0.2"
+              );
         };
 
         // Preload hanya gambar hero agar loading lebih cepat
@@ -100,9 +106,20 @@ export default function LoadingScreen() {
     return (
         <div
             ref={overlayRef}
-            className="fixed inset-0 z-[9999] bg-[#0b0b0f] text-white flex items-center justify-center px-6"
+            className="fixed inset-0 z-[9999] text-white flex items-center justify-center pointer-events-auto"
         >
-            <div className="w-full max-w-xl space-y-5 text-center">
+            {/* Background Columns */}
+            <div className="absolute inset-0 flex overflow-hidden">
+                {[...Array(5)].map((_, i) => (
+                    <div
+                        key={i}
+                        className="loading-column h-full w-[20%] bg-[#0b0b0f]"
+                    />
+                ))}
+            </div>
+
+            {/* Text Overlay */}
+            <div className="relative z-10 w-full max-w-xl space-y-5 text-center">
                 <div className="text-2xl font-semibold tracking-wide text-neutral-200" ref={textRef}>
                     Loading {percent}%
                 </div>
