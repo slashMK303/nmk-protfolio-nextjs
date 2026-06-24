@@ -30,6 +30,8 @@ export default function LoadingScreen() {
             if (finish.called) return;
             finish.called = true;
 
+            const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
             const tl = gsap.timeline({
                 onComplete: () => {
                     document.body.classList.remove("loading-lock");
@@ -38,21 +40,35 @@ export default function LoadingScreen() {
                 }
             });
 
-            // Fade out text first, then stagger columns slide-up from right to left
-            tl.to(text, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" })
-              .to(
-                  ".loading-column",
-                  {
-                      y: "-100%",
-                      duration: 0.8,
-                      ease: "power3.inOut",
-                      stagger: {
-                          each: 0.1,
-                          from: "end"
-                      }
-                  },
-                  "-=0.2"
-              );
+            if (isMobile) {
+                // Efek satu section utuh bergeser ke atas untuk mobile (tanpa gap/lag)
+                tl.to(text, { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" })
+                  .to(
+                      overlay,
+                      {
+                          y: "-100%",
+                          duration: 0.5,
+                          ease: "power2.inOut"
+                      },
+                      "-=0.1"
+                  );
+            } else {
+                // Fade out text first, then stagger columns slide-up from right to left (untuk desktop)
+                tl.to(text, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" })
+                  .to(
+                      ".loading-column",
+                      {
+                          y: "-100%",
+                          duration: 0.8,
+                          ease: "power3.inOut",
+                          stagger: {
+                              each: 0.1,
+                              from: "end"
+                          }
+                      },
+                      "-=0.2"
+                  );
+            }
         };
 
         // Preload hanya gambar hero agar loading lebih cepat
@@ -113,7 +129,9 @@ export default function LoadingScreen() {
                 {[...Array(5)].map((_, i) => (
                     <div
                         key={i}
-                        className="loading-column h-full w-[20%] bg-[#0b0b0f]"
+                        className={`loading-column h-full bg-[#0b0b0f] ${
+                            i === 0 ? "w-full md:w-[20.5%]" : "hidden md:block md:w-[20.5%]"
+                        }`}
                     />
                 ))}
             </div>
