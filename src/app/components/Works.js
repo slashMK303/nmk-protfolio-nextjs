@@ -275,7 +275,7 @@ export default function Works() {
                                                         const IconComponent = techData.icon;
                                                         return (
                                                             <div key={tech} className="group/icon relative" title={techData.name}>
-                                                                <IconComponent className="w-6 h-6 transition-transform hover:scale-110" style={{ color: techData.color }} />
+                                                                <IconComponent className="w-6 h-6 transition-transform hover:scale-110" style={{ color: techData.color }} aria-label={techData.name} />
                                                             </div>
                                                         );
                                                     })}
