@@ -252,9 +252,9 @@ export default function Journey() {
                             )}
 
                             <div
-                                className={`journey-card j-card-${index} relative w-full md:absolute md:w-[44%] max-w-2xl p-6 md:p-8 rounded-2xl bg-[#181818]/90 backdrop-blur-md border border-gray-700/40 shadow-2xl transition-all duration-300 z-10 ${isLeft
-                                    ? "md:left-[4%] md:right-auto"
-                                    : "md:right-[4%] md:left-auto"
+                                className={`journey-card j-card-${index} relative w-full md:absolute md:w-[48%] max-w-3xl p-6 md:p-10 rounded-2xl bg-[#181818]/90 backdrop-blur-md border border-gray-700/40 shadow-2xl transition-all duration-300 z-10 ${isLeft
+                                    ? "md:left-[2%] md:right-auto"
+                                    : "md:right-[2%] md:left-auto"
                                     }`}
                                 style={{
                                     top: mounted && !isMobile ? `${cardTopOffset}px` : "auto"
@@ -268,13 +268,13 @@ export default function Journey() {
                                     <>
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                                             <div>
-                                                <span className="inline-block px-3 py-1 rounded-full text-[10px] font-mono font-semibold uppercase bg-white/10 text-[#e8e8e3] mb-2">
+                                                <span className="inline-block px-3 py-1 rounded-full text-xs font-mono font-semibold uppercase bg-white/10 text-[#e8e8e3] mb-2">
                                                     {exp.type}
                                                 </span>
-                                                <h3 className="text-xl md:text-2xl font-bold text-white leading-snug">
+                                                <h3 className="text-xl md:text-3xl font-bold text-white leading-snug">
                                                     {exp.role}
                                                 </h3>
-                                                <p className="text-sm font-semibold text-[#e8e8e3]/80 mt-0.5">
+                                                <p className="text-sm md:text-base font-semibold text-[#e8e8e3]/80 mt-0.5">
                                                     {exp.company}
                                                 </p>
                                             </div>
@@ -283,7 +283,7 @@ export default function Journey() {
                                             </div>
                                         </div>
 
-                                        <p className="text-gray-400 text-xs md:text-sm leading-relaxed mb-4">
+                                        <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-4">
                                             {exp.description}
                                         </p>
 
@@ -291,7 +291,7 @@ export default function Journey() {
                                         {exp.highlights && exp.highlights.length > 0 && (
                                             <ul className="space-y-1.5 mb-5">
                                                 {exp.highlights.map((highlight, idx) => (
-                                                    <li key={idx} className="text-xs text-[#e8e8e3]/70 flex items-start gap-2">
+                                                    <li key={idx} className="text-sm text-[#e8e8e3]/70 flex items-start gap-2">
                                                         <span className="text-[#e8e8e3]/40 mt-1">•</span>
                                                         <span className="leading-relaxed">{highlight}</span>
                                                     </li>
@@ -342,7 +342,7 @@ export default function Journey() {
                                     // ACHIEVEMENT CARD CONTENT
                                     <>
                                         <div className="flex items-center justify-between mb-4">
-                                            <span className="text-xs text-[#e8e8e3]/55 uppercase tracking-wider font-semibold font-mono">
+                                            <span className="text-sm text-[#e8e8e3]/55 uppercase tracking-wider font-semibold font-mono">
                                                 {exp.subtitle}
                                             </span>
                                             <span className="px-3 py-1 rounded-full text-[10px] font-mono font-semibold uppercase bg-white/10 text-[#e8e8e3]">
@@ -350,11 +350,11 @@ export default function Journey() {
                                             </span>
                                         </div>
 
-                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-3 leading-snug">
+                                        <h3 className="text-xl md:text-3xl font-bold text-white mb-3 leading-snug">
                                             {exp.title}
                                         </h3>
 
-                                        <p className="text-gray-400 text-xs md:text-sm leading-relaxed mb-4">
+                                        <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-4">
                                             {exp.description}
                                         </p>
 
