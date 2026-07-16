@@ -6,9 +6,11 @@ import {
     // Backend & Database
     SiNodedotjs, SiExpress, SiNestjs, SiDjango, SiLaravel, SiSpringboot, SiPostgresql, SiMongodb, SiMysql, SiFirebase, SiSupabase, SiRedis, SiSqlite, SiGraphql,
     // Tools & Platforms
-    SiGit, SiGithub, SiDocker, SiKubernetes, SiAmazon, SiGooglecloud, SiVercel, SiNetlify, SiHeroku, SiFigma, SiAdobephotoshop, SiUnity, SiUnrealengine, SiFlutter, SiAndroid, SiIos
+    SiGit, SiGithub, SiDocker, SiKubernetes, SiAmazon, SiGooglecloud, SiVercel, SiNetlify, SiHeroku, SiFigma, SiAdobephotoshop, SiUnity, SiUnrealengine, SiFlutter, SiAndroid, SiIos,
+    // AI & New Icons
+    SiOpenai, SiShadcnui, SiGooglegemini, SiGoogle
 } from "react-icons/si";
-import { FaQrcode } from "react-icons/fa";
+import { FaQrcode, FaCreditCard, FaBrain } from "react-icons/fa";
 
 // Shared mapping for all tech icons
 // Usage: import { iconComponents } from "@/utils/techIcons";
@@ -81,5 +83,13 @@ export const iconComponents = {
     flutter: SiFlutter,
     android: SiAndroid,
     ios: SiIos,
-    unreal: SiUnrealengine
+    unreal: SiUnrealengine,
+
+    // AI & Payments
+    midtrans: FaCreditCard,
+    shadcnui: SiShadcnui,
+    oauth: SiGoogle,
+    groq: FaBrain,
+    gemini: SiGooglegemini,
+    openai: SiOpenai
 };
