@@ -127,14 +127,14 @@ export default function WhatIDo() {
             gsap.to(number, {
                 clipPath: 'inset(0% 0% 0% 0%)',
                 duration: 1,
-                delay: 0.7,
+                delay: 0.3,
                 ease: 'power3.out',
             });
 
             gsap.to(title, {
                 clipPath: 'inset(0% 0% 0% 0%)',
                 duration: 1.1,
-                delay: 0.85,
+                delay: 0.35,
                 ease: 'power3.out',
             });
 

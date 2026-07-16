@@ -23,7 +23,7 @@ export default function Skills() {
                     start: "210% top",
                     end: "410% bottom",
                     scrub: true,
-                    markers: true,
+                    // markers: true,
                 },
                 transformOrigin: "center top",
                 ease: "none",
