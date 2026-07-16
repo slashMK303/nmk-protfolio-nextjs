@@ -20,10 +20,10 @@ export default function Skills() {
                 // duration: 2,
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "10% top",
-                    end: "bottom top",
+                    start: "210% top",
+                    end: "410% bottom",
                     scrub: true,
-                    // markers: true,
+                    markers: true,
                 },
                 transformOrigin: "center top",
                 ease: "none",

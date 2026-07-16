@@ -61,6 +61,7 @@ export default function Navbar() {
         { name: 'Home', href: '#home' },
         { name: 'Services', href: '#whatido' },
         { name: 'Works', href: '#works' },
+        { name: 'Journey', href: '#journey' },
         { name: 'About', href: '#about' },
         { name: 'Contact', href: '#contact' },
     ];

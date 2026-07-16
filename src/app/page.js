@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import WhatIDo from "./components/WhatIDo";
 import Works from "./components/Works";
+import Journey from "./components/Journey";
 import Contact from "./components/Contact";
 import About from "./components/Skills";
 import Footer from "./components/Footer";
@@ -21,6 +22,7 @@ export default function Home() {
         <section id="works" className="section-padding">
           <Works />
         </section>
+        <Journey />
         <section id="about" className="section-padding bg-[#e8e8e8]">
           <About />
         </section>
