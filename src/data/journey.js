@@ -1,9 +1,9 @@
 import { experiences } from "./experience";
 import { achievements } from "./achievements";
 
-// Konfigurasi urutan linimasa gabungan (pengalaman & prestasi)
-// Hanya masukkan kartu data riil di sini. Tajuk/Headers ("Work Experience" & "Achievements")
-// akan dibuat secara otomatis dan mengambang secara dinamis di sela-sela perpindahan kategori.
+// Configuration for the combined timeline order (experiences & achievements)
+// Only include actual data cards here. Headers ("Work Experience" & "Achievements")
+// are automatically generated and dynamically floated between category transitions.
 export const journeyItems = [
     {
         id: "journey-01",
@@ -28,5 +28,11 @@ export const journeyItems = [
         type: "achievement",
         side: "right",
         data: achievements[0]
+    },
+    {
+        id: "journey-05",
+        type: "achievement",
+        side: "left",
+        data: achievements[1]
     }
 ];

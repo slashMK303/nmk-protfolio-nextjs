@@ -22,18 +22,18 @@ export const allProjects = [
         id: "proj-02",
         number: "02",
         title: "Naraf Prem",
-        subtitle: "Layanan Digital Premium",
+        subtitle: "Premium Digital Services",
         category: "web",
         featured: true,
-        description: "Penyedia layanan digital premium dengan sistem otomatis dan transaksi instan.",
+        description: "A premium digital service provider with automated systems and instant transactions.",
         thumbnail: "/img/project/naraf.webp",
         demoLink: "https://naraf.nanangmarvin.my.id/",
         githubLink: null,
         techStack: ["php", "tailwind", "mysql", "qris"],
         highlights: [
-            "Sistem otomatis",
-            "Transaksi instan",
-            "Layanan premium"
+            "Automated system",
+            "Instant transactions",
+            "Premium services"
         ],
         position: { top: "15%", right: "8%", rotate: 12 },
     },
@@ -41,18 +41,18 @@ export const allProjects = [
         id: "proj-03",
         number: "03",
         title: "ActivFlow",
-        subtitle: "SaaS Modeling UML Pintar",
+        subtitle: "Smart UML Modeling SaaS",
         category: "web",
         featured: true,
-        description: "ActivFlow adalah platform SaaS modeling UML pintar untuk merancang use case dan activity diagram secara instan. Cukup ketik proses bisnis Anda dan biarkan AI kami menggambarnya.",
+        description: "ActivFlow is a smart UML modeling SaaS platform for designing use case and activity diagrams instantly. Simply type your business process and let our AI draw it for you.",
         thumbnail: "/img/project/activflow.webp",
         demoLink: "https://activflow.biz.id/",
         githubLink: null,
         techStack: ["nextjs", "typescript", "mysql", "midtrans", "tailwind", "shadcnui", "oauth", "groq", "gemini", "openai"],
         highlights: [
-            "Instan use case & activity diagram",
+            "Instant use case & activity diagrams",
             "AI-powered diagram generation",
-            "Kemudahan pemodelan sistem"
+            "Effortless system modeling"
         ],
         position: { bottom: "20%", left: "10%", rotate: 6 },
     },
@@ -82,7 +82,7 @@ export const allProjects = [
         subtitle: "Kotak Cerita",
         category: "web",
         featured: false,
-        description: "Kotak Cerita adalah sebuah aplikasi web sederhana yang memungkinkan pengguna untuk berbagi cerita atau keluh kesah secara anonim. Aplikasi ini dibuat menggunakan Next.js dan Firebase.",
+        description: "Kotak Cerita is a simple web application that allows users to share stories or vent anonymously. Built with Next.js and Firebase.",
         thumbnail: "/img/project/kotak-cerita.webp",
         demoLink: "https://kotak-cerita.vercel.app/",
         githubLink: "https://github.com/slashMK303/kotak-cerita",
@@ -264,6 +264,13 @@ export const techIcons = {
     android: { name: "Android", color: "#3DDC84" },
     ios: { name: "iOS", color: "#ffffff" },
     unreal: { name: "Unreal Engine", color: "#ffffff" },
+
+    // DevOps & Server
+    cpanel: { name: "cPanel", color: "#FF6C2C" },
+    aapanel: { name: "aaPanel", color: "#20a53a" },
+    nginx: { name: "Nginx", color: "#009639" },
+    linux: { name: "Linux", color: "#FCC624" },
+    ubuntu: { name: "Ubuntu", color: "#E95420" },
 
     // AI & Payments
     midtrans: { name: "Midtrans", color: "#003087" },

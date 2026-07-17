@@ -166,7 +166,7 @@ export default function Journey() {
         <section
             id="journey"
             ref={containerRef}
-            className="relative bg-[#121212] text-[#e8e8e3] py-32 border-t border-white/5"
+            className="relative bg-[#121212] text-[#e8e8e3] py-32"
         >
             {/* Title - Padded and centered */}
             <div className="max-w-6xl mx-auto px-4 md:px-8 text-center mb-24 z-20">
