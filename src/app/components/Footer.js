@@ -41,6 +41,7 @@ export default function Footer() {
                         <li><button onClick={() => scrollToId("home")} className="hover:underline hover:cursor-pointer">Home</button></li>
                         <li><button onClick={() => scrollToId("services")} className="hover:underline hover:cursor-pointer">Services</button></li>
                         <li><button onClick={() => scrollToId("works")} className="hover:underline hover:cursor-pointer">Works</button></li>
+                        <li><button onClick={() => scrollToId("journey")} className="hover:underline hover:cursor-pointer">Journey</button></li>
                         <li><button onClick={() => scrollToId("about")} className="hover:underline hover:cursor-pointer">About</button></li>
                         <li><button onClick={() => scrollToId("contact")} className="hover:underline hover:cursor-pointer">Contact</button></li>
                     </ul>
