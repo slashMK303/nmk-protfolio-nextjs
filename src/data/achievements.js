@@ -9,7 +9,7 @@ export const achievements = [
             "https://media.licdn.com/dms/image/v2/D5622AQEZ73nr1BKb9w/feedshare-shrink_800/B56Z8i9ctgG0Ac-/0/1782997961802?e=1785974400&v=beta&t=JD_2kJPRd7iLcg1i64I79Z_OEklA_xoZPQM1cMcBT_M",
             "https://media.licdn.com/dms/image/v2/D5622AQF5mWSjdo3Nbg/feedshare-shrink_480/B56Z8i9cp2HYAg-/0/1782997961611?e=1785974400&v=beta&t=JXjqIRcuzs5KXuYtKI_2Y1P2QNeL7mAcqP2ys9M16Wc"
         ],
-        description: "Awarded a Bronze Medal in the Technology & Digital Innovation category at the SPARK UMS competition. Served as Backend & AI Developer for the 'Smart City Reporting' project — building an admin dashboard with Laravel, designing REST APIs using FastAPI (Python), writing API documentation, and implementing AI clustering for city infrastructure report analysis.",
+        description: "Awarded a Bronze Medal in the Technology & Digital Innovation category at the SPARK UMS competition. Served as Backend & AI Developer for the 'Smart City Reporting' project building an admin dashboard with Laravel, designing REST APIs using FastAPI (Python), writing API documentation, and implementing AI clustering for city infrastructure report analysis.",
         highlight: "Fully responsible for backend architecture, AI integration, and technical documentation of the smart city reporting system.",
         skills: ["laravel", "fastapi", "python", "mysql", "clustering", "ai"]
     },
