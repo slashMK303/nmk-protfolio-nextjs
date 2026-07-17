@@ -166,10 +166,10 @@ export default function Journey() {
         <section
             id="journey"
             ref={containerRef}
-            className="relative bg-[#121212] text-[#e8e8e3] py-32"
+            className="relative bg-[#121212] text-[#e8e8e3] md:py-32 py-12"
         >
             {/* Title - Padded and centered */}
-            <div className="max-w-6xl mx-auto px-4 md:px-8 text-center mb-24 z-20">
+            <div className="max-w-6xl mx-auto px-4 md:px-8 text-center md:mb-24 mb-12 z-20">
                 <span className="text-xs uppercase tracking-widest text-[#e8e8e3]/60 font-semibold font-mono">
                     Experience & Recognition
                 </span>
@@ -237,7 +237,7 @@ export default function Journey() {
 
                             {showAchHeader && (
                                 <div
-                                    className="relative w-full md:absolute md:left-1/2 md:-translate-x-1/2 md:w-auto md:max-w-none text-center px-4 md:px-0 transition-all duration-300 z-10 mt-12 md:mt-0"
+                                    className="relative w-full md:absolute md:left-1/2 md:-translate-x-1/2 md:w-auto md:max-w-none text-center px-4 md:px-0 transition-all duration-300 z-10 mt-4 md:mt-0"
                                     style={{
                                         top: mounted && !isMobile ? `${firstAchievementIndex * heightPerStep - 45}px` : "auto"
                                     }}
