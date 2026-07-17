@@ -1,7 +1,7 @@
 export const experiences = [
     {
         id: "exp-01",
-        role: "Intern Game Developer",
+        role: "Intern Programming",
         company: "Gamelab Indonesia",
         period: "Jan 2022 - Apr 2022",
         image: "https://media.licdn.com/dms/image/v2/D562DAQFMDXjKemhD-g/profile-treasury-document-images_1280/profile-treasury-document-images_1280/1/1737175900745?e=1785369600&v=beta&t=z5HeryQiUqqVgMwSsVX0qEwsV0hA61XiGcbCDftNkh4",
