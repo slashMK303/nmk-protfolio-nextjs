@@ -34,10 +34,30 @@ export default function WorksPage() {
     const [mounted, setMounted] = useState(false);
     const [hoveredCard, setHoveredCard] = useState(null);
 
+    // Lightbox states
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const [lightboxImages, setLightboxImages] = useState([]);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
+
+    // Close lightbox on Escape key
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                setIsLightboxOpen(false);
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
+
     // Filter projects based on category
     const filteredProjects = activeCategory === "all"
         ? allProjects
-        : allProjects.filter(p => p.category === activeCategory);
+        : allProjects.filter(p => 
+            Array.isArray(p.category) 
+                ? p.category.includes(activeCategory) 
+                : p.category === activeCategory
+        );
 
     // Check mobile viewport - runs after mount to prevent hydration mismatch
     useEffect(() => {
@@ -229,7 +249,7 @@ export default function WorksPage() {
 
             {/* Loading state while waiting for mount */}
             {!mounted && (
-                <section className="min-h-screen flex items-center justify-center">
+                <section key="loading" className="min-h-screen flex items-center justify-center">
                     <div className="animate-pulse flex flex-col items-center gap-4">
                         <div className="w-16 h-16 bg-white/10 rounded-2xl"></div>
                         <div className="w-32 h-4 bg-white/10 rounded"></div>
@@ -239,7 +259,7 @@ export default function WorksPage() {
 
             {/* Desktop: Horizontal Scroll Gallery */}
             {mounted && !isMobile && (
-                <section ref={galleryRef} className="relative min-h-screen">
+                <section key="desktop" ref={galleryRef} className="relative min-h-screen">
                     {/* Progress Bar */}
                     <div ref={progressRef} className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-64 h-1 bg-white/10 rounded-full overflow-hidden">
                         <div
@@ -262,30 +282,33 @@ export default function WorksPage() {
                         className="flex items-center gap-8 pl-[10vw] pr-[50vw] py-20"
                         style={{ width: 'max-content' }}
                     >
-                        {filteredProjects.map((project, index) => (
-                            <motion.article
-                                key={project.id}
-                                className="gallery-card flex-shrink-0 w-[70vw] max-w-[800px]"
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.4, delay: index * 0.05 }}
-                                onMouseEnter={() => setHoveredCard(project.id)}
-                                onMouseLeave={() => setHoveredCard(null)}
-                            >
-                                <Link
-                                    href={project.demoLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block group"
+                        {filteredProjects.map((project, index) => {
+                            const projectImages = project.images ? [project.thumbnail, ...project.images] : [project.thumbnail];
+                            return (
+                                <motion.article
+                                    key={project.id}
+                                    className="gallery-card flex-shrink-0 w-[70vw] max-w-[800px]"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                                    onMouseEnter={() => setHoveredCard(project.id)}
+                                    onMouseLeave={() => setHoveredCard(null)}
                                 >
-                                    <div className="relative bg-gradient-to-br from-[#1c1c1c] to-[#121212] border border-gray-700/50 rounded-3xl overflow-hidden transition-all duration-500 hover:border-[#e8e8e3]/30">
+                                    <div className="relative bg-gradient-to-br from-[#1c1c1c] to-[#121212] border border-gray-700/50 rounded-3xl overflow-hidden transition-all duration-500 hover:border-[#e8e8e3]/30 h-full flex flex-col">
                                         {/* Project Number Badge */}
                                         <div className="absolute top-6 left-6 z-20 w-14 h-14 flex items-center justify-center bg-[#e8e8e3]/10 border border-[#e8e8e3]/20 rounded-2xl backdrop-blur-sm">
                                             <span className="text-[#e8e8e3] font-bold text-lg">{project.number}</span>
                                         </div>
 
-                                        {/* Thumbnail */}
-                                        <div className="relative w-full h-[50vh] max-h-[500px] overflow-hidden">
+                                        {/* Thumbnail (Clickable to zoom) */}
+                                        <div 
+                                            className="relative w-full h-[45vh] max-h-[450px] overflow-hidden cursor-zoom-in group-hover:opacity-90 transition-opacity"
+                                            onClick={() => {
+                                                setLightboxImages(projectImages);
+                                                setLightboxIndex(0);
+                                                setIsLightboxOpen(true);
+                                            }}
+                                        >
                                             <Image
                                                 src={project.thumbnail}
                                                 alt={project.title}
@@ -298,64 +321,113 @@ export default function WorksPage() {
                                         </div>
 
                                         {/* Content */}
-                                        <div className="p-8 md:p-10">
-                                            <span className="text-xs text-[#e8e8e3]/70 font-semibold uppercase tracking-wider">
-                                                {project.subtitle}
-                                            </span>
-                                            <h2 className="text-3xl md:text-4xl font-bold text-white mt-3 mb-4 group-hover:text-[#e8e8e3] transition-colors">
-                                                {project.title}
-                                            </h2>
-                                            <p className="text-white/50 text-lg leading-relaxed mb-4">
-                                                {project.description}
-                                            </p>
-                                            {/* Technical Highlights */}
-                                            {project.highlights && project.highlights.length > 0 && (
-                                                <ul className="mb-4 space-y-1">
-                                                    {project.highlights.map((highlight, idx) => (
-                                                        <li key={idx} className="text-sm text-emerald-400/80 flex items-start gap-2">
-                                                            <span className="text-emerald-400">•</span>
-                                                            <span>{highlight}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-                                            {/* Tech Stack Icons */}
-                                            <div className="flex items-center gap-3 mb-6">
-                                                {project.techStack?.map((tech) => {
-                                                    const techData = techIcons[tech];
-                                                    if (!techData) return null;
-                                                    const IconComponent = techData.icon;
-                                                    return (
-                                                        <div key={tech} className="group/icon relative" title={techData.name}>
-                                                            <IconComponent className="w-8 h-8 transition-transform hover:scale-110" style={{ color: techData.color }} aria-label={techData.name} />
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                            {/* Action Buttons */}
-                                            <div className="flex items-center gap-4">
-                                                <div className="flex items-center gap-2 text-[#e8e8e3] font-semibold group-hover:text-white transition-colors">
-                                                    <span>View Project</span>
-                                                    <svg className="w-5 h-5 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                                    </svg>
-                                                </div>
-                                                {project.githubLink && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            e.stopPropagation();
-                                                            window.open(project.githubLink, '_blank', 'noopener,noreferrer');
-                                                        }}
-                                                        className="flex items-center gap-2 text-white/50 hover:text-white transition-colors"
-                                                        title="View on GitHub"
-                                                    >
-                                                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                        <div className="p-8 md:p-10 flex-1 flex flex-col justify-between">
+                                            <div>
+                                                <span className="text-xs text-[#e8e8e3]/70 font-semibold uppercase tracking-wider block">
+                                                    {project.subtitle}
+                                                </span>
+                                                <a 
+                                                    href={project.demoLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="block group/title mt-3 mb-4"
+                                                >
+                                                    <h2 className="text-3xl md:text-4xl font-bold text-white group-hover/title:text-[#e8e8e3] transition-colors flex items-center gap-3">
+                                                        <span>{project.title}</span>
+                                                        <svg className="w-6 h-6 opacity-0 group-hover/title:opacity-100 transition-opacity translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                                         </svg>
-                                                    </button>
+                                                    </h2>
+                                                </a>
+                                                <p className="text-white/50 text-lg leading-relaxed mb-6">
+                                                    {project.description}
+                                                </p>
+
+                                                {/* Screenshots Row */}
+                                                {project.images && project.images.length > 0 && (
+                                                    <div className="mb-6">
+                                                        <span className="text-xs text-white/40 block mb-2 uppercase tracking-wider font-semibold">Screenshots ({project.images.length})</span>
+                                                        <div className="flex gap-3 py-1 px-1">
+                                                            {project.images.slice(0, 5).map((img, idx) => {
+                                                                const isLast = idx === 4 && project.images.length > 5;
+                                                                const remainingCount = project.images.length - 4;
+                                                                return (
+                                                                    <button
+                                                                        key={idx}
+                                                                        onClick={() => {
+                                                                            setLightboxImages(projectImages);
+                                                                            setLightboxIndex(idx + 1);
+                                                                            setIsLightboxOpen(true);
+                                                                        }}
+                                                                        className="relative w-20 h-14 rounded-xl overflow-hidden border border-white/10 hover:border-white/50 hover:scale-105 active:scale-95 transition-all flex-shrink-0 shadow-lg cursor-zoom-in"
+                                                                    >
+                                                                        <Image src={img} alt={`Preview ${idx + 1}`} fill className="object-cover" />
+                                                                        {isLast && (
+                                                                            <div className="absolute inset-0 bg-black/75 flex items-center justify-center text-white text-sm font-bold">
+                                                                                +{remainingCount}
+                                                                            </div>
+                                                                        )}
+                                                                    </button>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
                                                 )}
+
+                                                {/* Technical Highlights */}
+                                                {project.highlights && project.highlights.length > 0 && (
+                                                    <ul className="mb-6 space-y-1">
+                                                        {project.highlights.map((highlight, idx) => (
+                                                            <li key={idx} className="text-sm text-emerald-400/80 flex items-start gap-2">
+                                                                <span className="text-emerald-400">•</span>
+                                                                <span>{highlight}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </div>
+
+                                            <div>
+                                                {/* Tech Stack Icons */}
+                                                <div className="flex items-center gap-3 mb-6">
+                                                    {project.techStack?.map((tech) => {
+                                                        const techData = techIcons[tech];
+                                                        if (!techData) return null;
+                                                        const IconComponent = techData.icon;
+                                                        return (
+                                                            <div key={tech} className="group/icon relative" title={techData.name}>
+                                                                <IconComponent className="w-8 h-8 transition-transform hover:scale-110" style={{ color: techData.color }} aria-label={techData.name} />
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                                {/* Action Buttons */}
+                                                <div className="flex items-center gap-4">
+                                                    <a
+                                                        href={project.demoLink}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center gap-2 text-[#e8e8e3] font-semibold hover:text-white transition-colors"
+                                                    >
+                                                        <span>View Project</span>
+                                                        <svg className="w-5 h-5 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                        </svg>
+                                                    </a>
+                                                    {project.githubLink && (
+                                                        <a
+                                                            href={project.githubLink}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex items-center gap-2 text-white/50 hover:text-white transition-colors"
+                                                            title="View on GitHub"
+                                                        >
+                                                            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                                            </svg>
+                                                        </a>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
 
@@ -366,9 +438,9 @@ export default function WorksPage() {
                                             </div>
                                         )}
                                     </div>
-                                </Link>
-                            </motion.article>
-                        ))}
+                                </motion.article>
+                            );
+                        })}
                     </div>
 
                     {/* Side Progress Dots */}
@@ -388,26 +460,31 @@ export default function WorksPage() {
 
             {/* Mobile: Vertical Scroll Gallery */}
             {mounted && isMobile && (
-                <section className="px-6 pb-20 space-y-6">
-                    {filteredProjects.map((project, index) => (
-                        <motion.article
-                            key={project.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            viewport={{ once: true }}
-                        >
-                            <Link
-                                href={project.demoLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block group"
+                <section key="mobile" className="px-6 pb-20 space-y-6">
+                    {filteredProjects.map((project, index) => {
+                        const projectImages = project.images ? [project.thumbnail, ...project.images] : [project.thumbnail];
+                        return (
+                            <motion.article
+                                key={project.id}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                viewport={{ once: true }}
                             >
-                                <div className="relative bg-gradient-to-br from-[#1c1c1c] to-[#121212] border border-gray-700/50 rounded-2xl overflow-hidden">
+                                <div className="relative bg-gradient-to-br from-[#1c1c1c] to-[#121212] border border-gray-700/50 rounded-2xl overflow-hidden shadow-2xl">
                                     <div className="absolute top-4 left-4 z-20 w-10 h-10 flex items-center justify-center bg-[#e8e8e3]/10 border border-[#e8e8e3]/20 rounded-xl backdrop-blur-sm">
                                         <span className="text-[#e8e8e3] font-bold text-sm">{project.number}</span>
                                     </div>
-                                    <div className="relative w-full h-48 overflow-hidden">
+
+                                    {/* Mobile Thumbnail */}
+                                    <div 
+                                        className="relative w-full h-48 overflow-hidden cursor-zoom-in"
+                                        onClick={() => {
+                                            setLightboxImages(projectImages);
+                                            setLightboxIndex(0);
+                                            setIsLightboxOpen(true);
+                                        }}
+                                    >
                                         <Image
                                             src={project.thumbnail}
                                             alt={project.title}
@@ -417,16 +494,59 @@ export default function WorksPage() {
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent opacity-80" />
                                     </div>
+
                                     <div className="p-5">
                                         <span className="text-[10px] text-[#e8e8e3]/70 font-semibold uppercase tracking-wider">
                                             {project.subtitle}
                                         </span>
-                                        <h2 className="text-xl font-bold text-white mt-2 mb-2 group-hover:text-[#e8e8e3] transition-colors">
-                                            {project.title}
-                                        </h2>
+                                        <a 
+                                            href={project.demoLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block group/title mt-2 mb-2"
+                                        >
+                                            <h2 className="text-xl font-bold text-white group-hover/title:text-[#e8e8e3] transition-colors flex items-center gap-2">
+                                                <span>{project.title}</span>
+                                                <svg className="w-4 h-4 translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                </svg>
+                                            </h2>
+                                        </a>
                                         <p className="text-white/50 text-sm leading-relaxed mb-3">
                                             {project.description}
                                         </p>
+
+                                        {/* Mobile Screenshots Row */}
+                                        {project.images && project.images.length > 0 && (
+                                            <div className="mb-4">
+                                                <span className="text-[10px] text-white/40 block mb-1.5 uppercase tracking-wider font-semibold">Screenshots ({project.images.length})</span>
+                                                <div className="flex gap-2 py-1 px-1">
+                                                    {project.images.slice(0, 4).map((img, idx) => {
+                                                        const isLast = idx === 3 && project.images.length > 4;
+                                                        const remainingCount = project.images.length - 3;
+                                                        return (
+                                                            <button
+                                                                key={idx}
+                                                                onClick={() => {
+                                                                    setLightboxImages(projectImages);
+                                                                    setLightboxIndex(idx + 1);
+                                                                    setIsLightboxOpen(true);
+                                                                }}
+                                                                className="relative w-16 h-12 rounded-lg overflow-hidden border border-white/10 active:border-white/50 transition-all flex-shrink-0 cursor-zoom-in shadow-md"
+                                                            >
+                                                                <Image src={img} alt={`Preview ${idx + 1}`} fill className="object-cover" />
+                                                                {isLast && (
+                                                                    <div className="absolute inset-0 bg-black/75 flex items-center justify-center text-white text-xs font-bold">
+                                                                        +{remainingCount}
+                                                                    </div>
+                                                                )}
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
+
                                         {/* Technical Highlights (mobile) */}
                                         {project.highlights && project.highlights.length > 0 && (
                                             <ul className="mb-3 space-y-0.5">
@@ -453,35 +573,127 @@ export default function WorksPage() {
                                         </div>
                                         {/* Action Buttons (mobile) */}
                                         <div className="flex items-center gap-3">
-                                            <div className="flex items-center gap-2 text-sm text-[#e8e8e3] font-semibold">
+                                            <a
+                                                href={project.demoLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 text-sm text-[#e8e8e3] font-semibold hover:text-white transition-colors"
+                                            >
                                                 <span>View Project</span>
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                                 </svg>
-                                            </div>
+                                            </a>
                                             {project.githubLink && (
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        window.open(project.githubLink, '_blank', 'noopener,noreferrer');
-                                                    }}
+                                                <a
+                                                    href={project.githubLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
                                                     className="text-white/50 hover:text-white transition-colors"
                                                     title="View on GitHub"
                                                 >
                                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                                         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                                                     </svg>
-                                                </button>
+                                                </a>
                                             )}
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
-                        </motion.article>
-                    ))}
+                            </motion.article>
+                        );
+                    })}
                 </section>
+            )}
+
+            {/* Lightbox Modal */}
+            {isLightboxOpen && lightboxImages.length > 0 && (
+                <div 
+                    className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 transition-all duration-300"
+                    onClick={() => setIsLightboxOpen(false)}
+                >
+                    {/* Close Button */}
+                    <button 
+                        className="absolute top-6 right-6 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all duration-200"
+                        onClick={() => setIsLightboxOpen(false)}
+                        title="Close (Esc)"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    {/* Navigation Buttons */}
+                    {lightboxImages.length > 1 && (
+                        <>
+                            {/* Prev Button */}
+                            <button 
+                                className="absolute left-6 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-4 rounded-full transition-all duration-200 z-10"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setLightboxIndex((prev) => (prev === 0 ? lightboxImages.length - 1 : prev - 1));
+                                }}
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+
+                            {/* Next Button */}
+                            <button 
+                                className="absolute right-6 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-4 rounded-full transition-all duration-200 z-10"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setLightboxIndex((prev) => (prev === lightboxImages.length - 1 ? 0 : prev + 1));
+                                }}
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </>
+                    )}
+
+                    {/* Large Image Box */}
+                    <div 
+                        className="relative w-full max-w-[90vw] h-[70vh] flex items-center justify-center"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <Image 
+                            src={lightboxImages[lightboxIndex]} 
+                            alt="Project snapshot" 
+                            fill 
+                            className="object-contain transition-all duration-300"
+                            sizes="90vw"
+                            priority
+                        />
+                    </div>
+
+                    {/* Bottom Status & Thumbnails */}
+                    <div 
+                        className="mt-6 flex flex-col items-center gap-3 z-10"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="text-white/60 text-sm font-medium">
+                            {lightboxIndex + 1} / {lightboxImages.length}
+                        </div>
+                        {lightboxImages.length > 1 && (
+                            <div className="flex gap-2 max-w-[85vw] overflow-x-auto py-2 px-2 no-scrollbar bg-white/5 backdrop-blur-sm rounded-2xl border border-white/5">
+                                {lightboxImages.map((img, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setLightboxIndex(idx)}
+                                        className={`relative w-14 h-10 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
+                                            idx === lightboxIndex ? 'border-white scale-105 shadow-md shadow-white/10' : 'border-transparent opacity-50 hover:opacity-100'
+                                        }`}
+                                    >
+                                        <Image src={img} alt={`Thumbnail ${idx + 1}`} fill className="object-cover" />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
             )}
 
         </main>

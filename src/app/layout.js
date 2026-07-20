@@ -142,7 +142,7 @@ export default function RootLayout({ children }) {
                 name: "Apa saja proyek unggulan yang pernah dikerjakan Nanang Marvin?",
                 acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Beberapa proyek utamanya meliputi Marvin Towing (solusi towing kendaraan berbasis web), Vin Top Up (platform top-up game), dan Kotak Cerita (platform sosial berbagi cerita).",
+                    text: "Beberapa proyek utamanya meliputi Vin POS (aplikasi kasir POS mobile offline-first), Vin Top Up (platform top-up game), dan ActivFlow (SaaS pemodelan UML cerdas).",
                 },
             },
         ],

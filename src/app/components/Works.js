@@ -24,6 +24,22 @@ export default function Works() {
     const [hoveredCard, setHoveredCard] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
 
+    // Lightbox states
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const [lightboxImages, setLightboxImages] = useState([]);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
+
+    // Close lightbox on Escape key
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                setIsLightboxOpen(false);
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
+
     const [cardRotations] = useState(() => {
         return Array.from({ length: featuredProjects.length }, () => ({
             rotateX: (Math.random() - 0.5) * 24,
@@ -165,23 +181,65 @@ export default function Works() {
 
                 {/* Mobile: stacked scroll list */}
                 <div className="w-full md:hidden mt-10 space-y-6 snap-y snap-mandatory overflow-x-hidden">
-                    {featuredProjects.map((project, index) => (
-                        <article key={project.id} className="snap-start" aria-labelledby={`${project.id}-title`} aria-describedby={`${project.id}-desc`}>
-                            <Link href={project.demoLink} target="_blank" rel="noopener noreferrer" className="block group" aria-label={`Buka ${project.title} (buka di tab baru)`}>
+                    {featuredProjects.map((project, index) => {
+                        const projectImages = project.images ? [project.thumbnail, ...project.images] : [project.thumbnail];
+                        return (
+                            <article key={project.id} className="snap-start" aria-labelledby={`${project.id}-title`} aria-describedby={`${project.id}-desc`}>
                                 <div className="relative bg-gradient-to-br from-[#1c1c1c] to-[#121212] border border-gray-700/50 rounded-2xl overflow-hidden shadow-2xl transition-shadow duration-300">
                                     <div className="absolute top-4 left-4 z-20 w-9 h-9 flex items-center justify-center bg-[#e8e8e3]/10 border border-[#e8e8e3]/20 rounded-lg backdrop-blur-sm">
                                         <span className="text-[#e8e8e3] font-bold text-xs">{project.number}</span>
                                     </div>
-                                    <div className="relative w-full h-40 overflow-hidden bg-gray-900">
+                                    {/* Mobile main image (zoomable) */}
+                                    <div 
+                                        className="relative w-full h-40 overflow-hidden bg-gray-900 cursor-zoom-in"
+                                        onClick={() => {
+                                            setLightboxImages(projectImages);
+                                            setLightboxIndex(0);
+                                            setIsLightboxOpen(true);
+                                        }}
+                                    >
                                         <Image src={project.thumbnail} alt={`${project.title} thumbnail`} fill sizes="(max-width: 768px) 100vw, 380px" className="object-cover transition-transform duration-700 group-hover:scale-105" priority={index === 0} />
                                         <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent opacity-70"></div>
                                     </div>
                                     <div className="p-4">
                                         <span className="text-[10px] text-[#e8e8e3]/70 font-semibold uppercase tracking-wider">{project.subtitle}</span>
-                                        <h3 id={`${project.id}-title`} className="text-lg font-bold text-white mt-2 group-hover:text-[#e8e8e3] transition-colors">{project.title}</h3>
+                                        <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="block group/title mt-1">
+                                            <h3 id={`${project.id}-title`} className="text-lg font-bold text-white group-hover/title:text-[#e8e8e3] transition-colors">{project.title}</h3>
+                                        </a>
                                         <p id={`${project.id}-desc`} className="text-gray-400 text-sm mt-2">{project.description}</p>
+                                        
+                                        {/* Mobile screenshots thumbnail list */}
+                                        {project.images && project.images.length > 0 && (
+                                            <div className="flex gap-2 mt-3">
+                                                {project.images.slice(0, 3).map((img, idx) => {
+                                                    const isLast = idx === 2 && project.images.length > 3;
+                                                    const remainingCount = project.images.length - 2;
+                                                    return (
+                                                        <button
+                                                            key={idx}
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                setLightboxImages(projectImages);
+                                                                setLightboxIndex(idx + 1);
+                                                                setIsLightboxOpen(true);
+                                                            }}
+                                                            className="relative w-14 h-10 rounded-lg overflow-hidden border border-white/10 active:border-white/40 transition-all flex-shrink-0 cursor-zoom-in shadow-md"
+                                                        >
+                                                            <Image src={img} alt={`Preview ${idx + 1}`} fill className="object-cover" />
+                                                            {isLast && (
+                                                                <div className="absolute inset-0 bg-black/75 flex items-center justify-center text-white text-xs font-bold">
+                                                                    +{remainingCount}
+                                                                </div>
+                                                            )}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+
                                         {/* Tech Stack Icons */}
-                                        <div className="flex items-center gap-2 mt-3">
+                                        <div className="flex items-center gap-2 mt-4">
                                             {project.techStack?.map((tech) => {
                                                 const techData = techIcons[tech];
                                                 if (!techData) return null;
@@ -193,59 +251,52 @@ export default function Works() {
                                                 );
                                             })}
                                         </div>
-                                        <div className="flex items-center gap-3 text-sm text-[#e8e8e3] font-semibold mt-3">
-                                            <span>Explore</span>
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                                        <div className="flex items-center gap-3 text-sm text-[#e8e8e3] font-semibold mt-4">
+                                            <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                                                <span>Explore</span>
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                                            </a>
                                             {project.githubLink && (
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        window.open(project.githubLink, '_blank', 'noopener,noreferrer');
-                                                    }}
+                                                <a
+                                                    href={project.githubLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
                                                     className="ml-auto text-white/50 hover:text-white transition-colors"
                                                     title="GitHub"
                                                 >
                                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                                         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                                                     </svg>
-                                                </button>
+                                                </a>
                                             )}
-                                            <span className="sr-only">Buka {project.title}</span>
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
-                        </article>
-                    ))}
+                            </article>
+                        );
+                    })}
                 </div>
 
                 {/* Desktop: floating cards */}
                 <div className="absolute inset-0 w-full h-full overflow-hidden hidden md:block">
-                    {featuredProjects.map((project, index) => (
-                        <article
-                            key={project.id}
-                            className="floating-card absolute w-[300px] md:w-[340px] lg:w-[380px]"
-                            style={{
-                                top: project.position.top,
-                                bottom: project.position.bottom,
-                                left: project.position.left,
-                                right: project.position.right,
-                                transformStyle: 'preserve-3d',
-                            }}
-                            onMouseEnter={() => setHoveredCard(project.id)}
-                            onMouseLeave={() => setHoveredCard(null)}
-                            aria-labelledby={`${project.id}-title`}
-                            aria-describedby={`${project.id}-desc`}
-                            role="article"
-                        >
-                            <Link
-                                href={project.demoLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block group h-full"
-                                aria-label={`Buka ${project.title} (buka di tab baru)`}
+                    {featuredProjects.map((project, index) => {
+                        const projectImages = project.images ? [project.thumbnail, ...project.images] : [project.thumbnail];
+                        return (
+                            <article
+                                key={project.id}
+                                className="floating-card absolute w-[300px] md:w-[340px] lg:w-[380px]"
+                                style={{
+                                    top: project.position.top,
+                                    bottom: project.position.bottom,
+                                    left: project.position.left,
+                                    right: project.position.right,
+                                    transformStyle: 'preserve-3d',
+                                }}
+                                onMouseEnter={() => setHoveredCard(project.id)}
+                                onMouseLeave={() => setHoveredCard(null)}
+                                aria-labelledby={`${project.id}-title`}
+                                aria-describedby={`${project.id}-desc`}
+                                role="article"
                             >
                                 <div
                                     data-card-inner
@@ -256,19 +307,60 @@ export default function Works() {
                                         <div className="absolute top-4 left-4 z-20 w-10 h-10 flex items-center justify-center bg-[#e8e8e3]/10 border border-[#e8e8e3]/20 rounded-lg backdrop-blur-sm">
                                             <span className="text-[#e8e8e3] font-bold text-sm">{project.number}</span>
                                         </div>
-                                        <div className="relative w-full h-44 md:h-52 overflow-hidden bg-gray-900 flex-shrink-0">
+                                        {/* Desktop main image (zoomable) */}
+                                        <div 
+                                            className="relative w-full h-44 md:h-52 overflow-hidden bg-gray-900 flex-shrink-0 cursor-zoom-in"
+                                            onClick={() => {
+                                                setLightboxImages(projectImages);
+                                                setLightboxIndex(0);
+                                                setIsLightboxOpen(true);
+                                            }}
+                                        >
                                             <Image src={project.thumbnail} alt={`${project.title} thumbnail`} fill sizes="(max-width: 768px) 100vw, 380px" className="object-cover transition-transform duration-700 group-hover:scale-110" priority={index === 0} />
                                             <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent opacity-70"></div>
                                         </div>
                                         <div className="p-5 md:p-6 relative z-10 flex-1 flex flex-col justify-between">
                                             <div>
-                                                <div className="inline-block mb-3">
+                                                <div className="inline-block mb-2">
                                                     <span className="text-xs text-[#e8e8e3]/70 font-semibold uppercase tracking-wider">{project.subtitle}</span>
                                                 </div>
-                                                <h3 id={`${project.id}-title`} className="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-[#e8e8e3] transition-colors duration-300">{project.title}</h3>
-                                                <p id={`${project.id}-desc`} className="text-gray-400 text-sm leading-relaxed">{project.description}</p>
+                                                <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="block group/title">
+                                                    <h3 id={`${project.id}-title`} className="text-xl md:text-2xl font-bold text-white mb-2 group-hover/title:text-[#e8e8e3] transition-colors duration-300">{project.title}</h3>
+                                                </a>
+                                                <p id={`${project.id}-desc`} className="text-gray-400 text-sm leading-relaxed mb-3">{project.description}</p>
+                                                
+                                                {/* Desktop screenshots thumbnail list */}
+                                                {project.images && project.images.length > 0 && (
+                                                    <div className="flex gap-2 py-1 px-1 mb-3">
+                                                        {project.images.slice(0, 3).map((img, idx) => {
+                                                            const isLast = idx === 2 && project.images.length > 3;
+                                                            const remainingCount = project.images.length - 2;
+                                                            return (
+                                                                <button
+                                                                    key={idx}
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        e.stopPropagation();
+                                                                        setLightboxImages(projectImages);
+                                                                        setLightboxIndex(idx + 1);
+                                                                        setIsLightboxOpen(true);
+                                                                    }}
+                                                                    className="relative w-14 h-10 rounded-lg overflow-hidden border border-white/10 hover:border-white/40 hover:scale-105 transition-all flex-shrink-0 cursor-zoom-in shadow-md"
+                                                                >
+                                                                    <Image src={img} alt={`Preview ${idx + 1}`} fill className="object-cover" />
+                                                                    {isLast && (
+                                                                        <div className="absolute inset-0 bg-black/75 flex items-center justify-center text-white text-xs font-bold">
+                                                                            +{remainingCount}
+                                                                        </div>
+                                                                    )}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+
                                                 {/* Tech Stack Icons */}
-                                                <div className="flex items-center gap-2 mt-3">
+                                                <div className="flex items-center gap-2">
                                                     {project.techStack?.map((tech) => {
                                                         const techData = techIcons[tech];
                                                         if (!techData) return null;
@@ -281,10 +373,24 @@ export default function Works() {
                                                     })}
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-2 text-sm text-[#e8e8e3] font-semibold group-hover:text-white transition-colors mt-4">
-                                                <span>Explore</span>
-                                                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                                                <span className="sr-only">Buka {project.title}</span>
+                                            <div className="flex items-center gap-4 text-sm text-[#e8e8e3] font-semibold mt-4">
+                                                <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                                                    <span>Explore</span>
+                                                    <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                                                </a>
+                                                {project.githubLink && (
+                                                    <a
+                                                        href={project.githubLink}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="ml-auto text-white/50 hover:text-white transition-colors"
+                                                        title="GitHub"
+                                                    >
+                                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                                        </svg>
+                                                    </a>
+                                                )}
                                             </div>
                                         </div>
                                         {hoveredCard === project.id && (
@@ -301,11 +407,101 @@ export default function Works() {
                                         ></div>
                                     </div>
                                 </div>
-                            </Link>
-                        </article>
-                    ))}
+                            </article>
+                        );
+                    })}
                 </div>
             </div>
+
+            {/* Lightbox Modal */}
+            {isLightboxOpen && lightboxImages.length > 0 && (
+                <div 
+                    className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 transition-all duration-300"
+                    onClick={() => setIsLightboxOpen(false)}
+                >
+                    {/* Close Button */}
+                    <button 
+                        className="absolute top-6 right-6 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all duration-200"
+                        onClick={() => setIsLightboxOpen(false)}
+                        title="Close (Esc)"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    {/* Navigation Buttons */}
+                    {lightboxImages.length > 1 && (
+                        <>
+                            {/* Prev Button */}
+                            <button 
+                                className="absolute left-6 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-4 rounded-full transition-all duration-200 z-10"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setLightboxIndex((prev) => (prev === 0 ? lightboxImages.length - 1 : prev - 1));
+                                }}
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+
+                            {/* Next Button */}
+                            <button 
+                                className="absolute right-6 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-4 rounded-full transition-all duration-200 z-10"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setLightboxIndex((prev) => (prev === lightboxImages.length - 1 ? 0 : prev + 1));
+                                }}
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </>
+                    )}
+
+                    {/* Large Image Box */}
+                    <div 
+                        className="relative w-full max-w-[90vw] h-[70vh] flex items-center justify-center"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <Image 
+                            src={lightboxImages[lightboxIndex]} 
+                            alt="Project snapshot" 
+                            fill 
+                            className="object-contain transition-all duration-300"
+                            sizes="90vw"
+                            priority
+                        />
+                    </div>
+
+                    {/* Bottom Status & Thumbnails */}
+                    <div 
+                        className="mt-6 flex flex-col items-center gap-3 z-10"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="text-white/60 text-sm font-medium">
+                            {lightboxIndex + 1} / {lightboxImages.length}
+                        </div>
+                        {lightboxImages.length > 1 && (
+                            <div className="flex gap-2 max-w-[85vw] overflow-x-auto py-2 px-2 no-scrollbar bg-white/5 backdrop-blur-sm rounded-2xl border border-white/5">
+                                {lightboxImages.map((img, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setLightboxIndex(idx)}
+                                        className={`relative w-14 h-10 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
+                                            idx === lightboxIndex ? 'border-white scale-105 shadow-md shadow-white/10' : 'border-transparent opacity-50 hover:opacity-100'
+                                        }`}
+                                    >
+                                        <Image src={img} alt={`Thumbnail ${idx + 1}`} fill className="object-cover" />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </section>
     );
 }
